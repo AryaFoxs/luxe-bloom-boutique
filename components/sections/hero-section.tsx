@@ -4,7 +4,7 @@ import { ChevronDown, Sparkles } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-0">
       {/* Background with gradient overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -38,10 +38,7 @@ export function HeroSection() {
             style={{ animationDelay: '0.2s' }}
           >
             Boutique Florist &{" "}
-            <span className="relative">
-              <span className="relative z-10 text-rose-light">Flower Delivery</span>
-              <span className="absolute bottom-2 left-0 right-0 h-3 bg-gold/30 -rotate-1 z-0" />
-            </span>
+            <span className="text-rose-light">Flower Delivery</span>
           </h1>
 
           {/* Subheading */}
