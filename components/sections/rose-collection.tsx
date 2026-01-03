@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
 
 const roseVarieties = [
   { name: "Red Roses", description: "Classic symbol of love", count: "50+" },
@@ -18,15 +18,13 @@ export function RoseCollection() {
           {/* Left - Image */}
           <div className="relative">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-              {/* Placeholder for rose image */}
-              <div className="absolute inset-0 bg-gradient-to-br from-rose via-rose-light to-rose-dark">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white p-8">
-                    <Sparkles className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                    <p className="font-serif text-2xl opacity-80">Premium Rose Collection</p>
-                  </div>
-                </div>
-              </div>
+              <Image
+                src="/images/bouquets/IMG-20251231-WA0014 (1).jpg"
+                alt="Premium Rose Collection"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
             </div>
             
             {/* Decorative elements */}

@@ -8,6 +8,7 @@ import {
   QualityStandards,
   ContactSection,
 } from "@/components/sections";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <InstagramFeed />
       <QualityStandards />
       <ContactSection />
+      <WhatsAppButton />
     </>
   );
 }
