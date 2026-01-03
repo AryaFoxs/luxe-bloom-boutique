@@ -79,7 +79,7 @@ export function HeroSection() {
 
           {/* Trust badges */}
           <div 
-            className="pt-12 flex flex-wrap items-center justify-center gap-8 text-white/60 animate-fadeIn"
+            className="pt-12 pb-20 md:pb-0 flex flex-wrap items-center justify-center gap-8 text-white/60 animate-fadeIn"
             style={{ animationDelay: '0.8s' }}
           >
             <div className="flex items-center gap-2">
@@ -99,7 +99,7 @@ export function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
         <Link 
           href="#bouquets"
           className="flex flex-col items-center gap-2 text-white/60 hover:text-white/90 transition-colors"

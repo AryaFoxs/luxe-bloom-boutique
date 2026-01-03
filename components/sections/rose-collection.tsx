@@ -33,7 +33,7 @@ export function RoseCollection() {
             
             {/* Floating badge */}
             <div className="absolute -right-4 top-1/4 bg-white p-4 rounded-2xl shadow-xl">
-              <div className="text-rose font-serif text-3xl font-bold">140+</div>
+              <div className="text-rose font-serif text-3xl font-bold">171+</div>
               <div className="text-muted-foreground text-sm">Rose Varieties</div>
             </div>
           </div>

@@ -1,8 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Heart, ShoppingBag } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ArrowRight, Heart, ShoppingBag, X } from "lucide-react";
 
 interface Bouquet {
   id: string;
@@ -82,7 +91,13 @@ function formatPrice(price: number): string {
   }).format(price);
 }
 
-function BouquetCard({ bouquet }: { bouquet: Bouquet }) {
+function BouquetCard({ 
+  bouquet, 
+  onViewDetails 
+}: { 
+  bouquet: Bouquet;
+  onViewDetails: (bouquet: Bouquet) => void;
+}) {
   return (
     <Card className="group relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
       {/* Promo Badge */}
@@ -132,14 +147,12 @@ function BouquetCard({ bouquet }: { bouquet: Bouquet }) {
         {/* Actions */}
         <div className="flex gap-2">
           <Button
-            asChild
             variant="outline"
             size="sm"
             className="flex-1 rounded-full border-rose/30 text-rose hover:bg-rose hover:text-white hover:border-rose transition-all duration-300"
+            onClick={() => onViewDetails(bouquet)}
           >
-            <Link href={`/shop/${bouquet.id}`}>
-              See Details
-            </Link>
+            See Details
           </Button>
           <Button
             size="sm"
@@ -154,7 +167,128 @@ function BouquetCard({ bouquet }: { bouquet: Bouquet }) {
   );
 }
 
+function BouquetDetailDialog({
+  bouquet,
+  isOpen,
+  onClose,
+}: {
+  bouquet: Bouquet | null;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  if (!bouquet) return null;
+
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-white">
+        <div className="grid md:grid-cols-2 gap-0 max-h-[90vh] overflow-y-auto">
+          {/* Image Section */}
+          <div className="relative aspect-[4/3] md:aspect-auto md:h-full min-h-[200px] md:min-h-[400px] bg-muted">
+            <Image
+              src={bouquet.image}
+              alt={bouquet.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            {bouquet.isPromo && (
+              <div className="absolute top-4 left-4 px-3 py-1 bg-gold text-white text-xs font-semibold uppercase tracking-wider rounded-full shadow-lg">
+                Promo
+              </div>
+            )}
+          </div>
+
+          {/* Content Section */}
+          <div className="p-5 md:p-8 flex flex-col">
+            <DialogHeader className="mb-3 md:mb-4">
+              <DialogTitle className="font-serif text-xl md:text-3xl font-semibold text-foreground">
+                {bouquet.name}
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="flex-1 space-y-4 md:space-y-6">
+              {/* Price */}
+              <div className="inline-block px-4 py-2 bg-rose/10 rounded-full">
+                <span className="text-rose font-semibold text-lg md:text-xl">
+                  {formatPrice(bouquet.price)}
+                </span>
+              </div>
+
+              {/* Description */}
+              <div>
+                <h4 className="text-xs md:text-sm font-semibold text-foreground uppercase tracking-wider mb-2">
+                  Description
+                </h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {bouquet.description}
+                </p>
+              </div>
+
+              {/* Features */}
+              <div>
+                <h4 className="text-xs md:text-sm font-semibold text-foreground uppercase tracking-wider mb-2 md:mb-3">
+                  Includes
+                </h4>
+                <ul className="space-y-1.5 md:space-y-2 text-muted-foreground text-xs md:text-sm">
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-rose rounded-full flex-shrink-0" />
+                    Premium fresh flowers
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-rose rounded-full flex-shrink-0" />
+                    Elegant wrapping
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-rose rounded-full flex-shrink-0" />
+                    Personalized message card
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-rose rounded-full flex-shrink-0" />
+                    Same-day delivery available
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 mt-4 md:mt-6 pt-4 md:pt-6 border-t border-border">
+              <Button
+                className="flex-1 rounded-full bg-rose hover:bg-rose-dark text-white py-5 md:py-6 text-sm md:text-base transition-all duration-300"
+              >
+                <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                Add to Cart
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full w-10 h-10 md:w-12 md:h-12 border-rose/30 text-rose hover:bg-rose hover:text-white transition-all duration-300"
+                aria-label="Add to wishlist"
+              >
+                <Heart className="w-4 h-4 md:w-5 md:h-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export function FeaturedBouquets() {
+  const [selectedBouquet, setSelectedBouquet] = useState<Bouquet | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleViewDetails = (bouquet: Bouquet) => {
+    setSelectedBouquet(bouquet);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedBouquet(null);
+  };
+
   return (
     <section id="bouquets" className="py-20 lg:py-28 bg-gradient-to-b from-cream to-white">
       <div className="container mx-auto px-4 lg:px-8">
@@ -176,7 +310,11 @@ export function FeaturedBouquets() {
         {/* Bouquet Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {bouquets.map((bouquet) => (
-            <BouquetCard key={bouquet.id} bouquet={bouquet} />
+            <BouquetCard 
+              key={bouquet.id} 
+              bouquet={bouquet} 
+              onViewDetails={handleViewDetails}
+            />
           ))}
         </div>
 
@@ -194,6 +332,14 @@ export function FeaturedBouquets() {
           </Button>
         </div>
       </div>
+
+      {/* Bouquet Detail Dialog */}
+      <BouquetDetailDialog
+        bouquet={selectedBouquet}
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+      />
     </section>
   );
 }
+

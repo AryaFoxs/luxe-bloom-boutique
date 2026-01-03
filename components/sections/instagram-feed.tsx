@@ -69,7 +69,7 @@ export function InstagramFeed() {
             className="rounded-full px-8 border-2 border-rose text-rose hover:bg-rose hover:text-white transition-all duration-300 group"
           >
             <Link 
-              href="https://instagram.com/luxebloomboutique" 
+              href="https://instagram.com/luxe.bloomboutique" 
               target="_blank" 
               rel="noopener noreferrer"
             >
