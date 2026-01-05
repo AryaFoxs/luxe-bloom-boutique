@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Navbar, Footer } from "@/components/layout";
 
 export const metadata: Metadata = {
   title: "Luxe Bloom Boutique | Premium Florist & Flower Delivery",
@@ -41,12 +40,9 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
 }
+
