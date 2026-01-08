@@ -12,6 +12,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ArrowRight, Heart, ShoppingBag, X } from "lucide-react";
+import { useCart } from "@/lib/cart-context";
+import { AddonsDialog } from "@/components/cart";
 
 interface Bouquet {
   id: string;
@@ -93,10 +95,12 @@ function formatPrice(price: number): string {
 
 function BouquetCard({ 
   bouquet, 
-  onViewDetails 
+  onViewDetails,
+  onAddToCart,
 }: { 
   bouquet: Bouquet;
   onViewDetails: (bouquet: Bouquet) => void;
+  onAddToCart: (bouquet: Bouquet) => void;
 }) {
   return (
     <Card className="group relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
@@ -158,6 +162,7 @@ function BouquetCard({
             size="sm"
             className="rounded-full bg-rose hover:bg-rose-dark text-white px-4 transition-all duration-300"
             aria-label="Add to cart"
+            onClick={() => onAddToCart(bouquet)}
           >
             <ShoppingBag className="w-4 h-4" />
           </Button>
@@ -171,10 +176,12 @@ function BouquetDetailDialog({
   bouquet,
   isOpen,
   onClose,
+  onAddToCart,
 }: {
   bouquet: Bouquet | null;
   isOpen: boolean;
   onClose: () => void;
+  onAddToCart: (bouquet: Bouquet) => void;
 }) {
   if (!bouquet) return null;
 
@@ -255,6 +262,10 @@ function BouquetDetailDialog({
             <div className="flex gap-3 mt-4 md:mt-6 pt-4 md:pt-6 border-t border-border">
               <Button
                 className="flex-1 rounded-full bg-rose hover:bg-rose-dark text-white py-5 md:py-6 text-sm md:text-base transition-all duration-300"
+                onClick={() => {
+                  onAddToCart(bouquet);
+                  onClose();
+                }}
               >
                 <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Add to Cart
@@ -278,6 +289,7 @@ function BouquetDetailDialog({
 export function FeaturedBouquets() {
   const [selectedBouquet, setSelectedBouquet] = useState<Bouquet | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [addonsBouquet, setAddonsBouquet] = useState<Bouquet | null>(null);
 
   const handleViewDetails = (bouquet: Bouquet) => {
     setSelectedBouquet(bouquet);
@@ -287,6 +299,10 @@ export function FeaturedBouquets() {
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
     setSelectedBouquet(null);
+  };
+
+  const handleAddToCart = (bouquet: Bouquet) => {
+    setAddonsBouquet(bouquet);
   };
 
   return (
@@ -314,6 +330,7 @@ export function FeaturedBouquets() {
               key={bouquet.id} 
               bouquet={bouquet} 
               onViewDetails={handleViewDetails}
+              onAddToCart={handleAddToCart}
             />
           ))}
         </div>
@@ -325,7 +342,7 @@ export function FeaturedBouquets() {
             size="lg"
             className="rounded-full px-10 py-6 bg-rose hover:bg-rose-dark text-white shadow-xl hover:shadow-rose/30 transition-all duration-300 group"
           >
-            <Link href="/shop">
+            <Link href="/bouquets">
               Discover Our Entire Collection
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -338,6 +355,14 @@ export function FeaturedBouquets() {
         bouquet={selectedBouquet}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
+        onAddToCart={handleAddToCart}
+      />
+
+      {/* Add-ons Dialog */}
+      <AddonsDialog
+        bouquet={addonsBouquet}
+        isOpen={!!addonsBouquet}
+        onClose={() => setAddonsBouquet(null)}
       />
     </section>
   );

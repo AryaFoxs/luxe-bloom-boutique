@@ -6,13 +6,14 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { CartButton } from "@/components/cart";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "#bouquets", label: "Bouquets" },
-  { href: "#services", label: "Services" },
-  { href: "#about", label: "About" },
-  { href: "#contact", label: "Contact" },
+  { href: "/bouquets", label: "Bouquets" },
+  { href: "/#services", label: "Services" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Navbar() {
@@ -92,8 +93,9 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
+          {/* CTA Button & Cart */}
+          <div className="hidden md:flex items-center gap-3">
+            <CartButton isScrolled={isScrolled} />
             <Button
               asChild
               className={cn(
@@ -103,23 +105,26 @@ export function Navbar() {
                   : "bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm"
               )}
             >
-              <Link href="#bouquets">Shop Now</Link>
+              <Link href="/bouquets">Shop Now</Link>
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={cn(
-              "md:hidden p-2 rounded-lg transition-colors",
-              isScrolled
-                ? "text-foreground hover:bg-rose/10"
-                : "text-white hover:bg-white/10"
-            )}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Cart & Menu Buttons */}
+          <div className="md:hidden flex items-center gap-2">
+            <CartButton isScrolled={isScrolled} />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                isScrolled
+                  ? "text-foreground hover:bg-rose/10"
+                  : "text-white hover:bg-white/10"
+              )}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
