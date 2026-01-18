@@ -6,3 +6,8 @@ export { ServicesSection } from "./services-section";
 export { InstagramFeed } from "./instagram-feed";
 export { QualityStandards } from "./quality-standards";
 export { ContactSection } from "./contact-section";
+export { OnSaleSection } from "./on-sale-section";
+export { BespokeServiceSection } from "./bespoke-service-section";
+export { UpgradesSection } from "./upgrades-section";
+export { BallerPackagesSection } from "./baller-packages-section";
+export { AboutSection } from "./about-section";

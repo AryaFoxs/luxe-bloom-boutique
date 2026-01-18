@@ -311,11 +311,11 @@ export function FeaturedBouquets() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-rose text-sm font-medium uppercase tracking-widest mb-4">
-            Our Collection
+            Featured Products
           </span>
           <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6">
-            Fresh Bouquets from{" "}
-            <span className="text-rose">Luxe Bloom</span>
+            Curated{" "}
+            <span className="text-rose">Collection</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
             Handpicked by our expert florists, these fresh bouquets are perfect for any occasion. 

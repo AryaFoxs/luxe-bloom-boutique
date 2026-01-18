@@ -11,9 +11,9 @@ import { CartButton } from "@/components/cart";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/bouquets", label: "Bouquets" },
-  { href: "/#services", label: "Services" },
-  { href: "/#about", label: "About" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {

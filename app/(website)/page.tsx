@@ -1,11 +1,13 @@
 import {
   HeroSection,
-  FeaturedBouquets,
-  DeliverySection,
+  OnSaleSection,
+  BespokeServiceSection,
   RoseCollection,
-  ServicesSection,
-  InstagramFeed,
-  QualityStandards,
+  UpgradesSection,
+  DeliverySection,
+  BallerPackagesSection,
+  AboutSection,
+  FeaturedBouquets,
   ContactSection,
 } from "@/components/sections";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
@@ -13,14 +15,37 @@ import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 export default function Home() {
   return (
     <>
+      {/* 1. Hero Section */}
       <HeroSection />
-      <FeaturedBouquets />
-      <DeliverySection />
+      
+      {/* 2. ON SALE - Signature Bouquets */}
+      <OnSaleSection />
+      
+      {/* 3. BESPOKE SERVICE - Order Your Custom Bouquet */}
+      <BespokeServiceSection />
+      
+      {/* 4. ROMANTIC PICKS - Rose Collection */}
       <RoseCollection />
-      <ServicesSection />
-      <InstagramFeed />
-      <QualityStandards />
+      
+      {/* 5. UPGRADES - Chocolates, Wine, Balloons, Teddy Bears */}
+      <UpgradesSection />
+      
+      {/* 6. ISLAND-WIDE DELIVERY - Same Day Delivery Across Bali */}
+      <DeliverySection />
+      
+      {/* 7. BALLER PACKAGES - Grand Gestures */}
+      <BallerPackagesSection />
+      
+      {/* 8. ABOUT US - Where Poetry Meets Petals */}
+      <AboutSection />
+      
+      {/* 9. FEATURED PRODUCTS - Curated Collection */}
+      <FeaturedBouquets />
+      
+      {/* 10. GET IN TOUCH - Let's Talk Flowers */}
       <ContactSection />
+      
+      {/* WhatsApp Floating Button */}
       <WhatsAppButton />
     </>
   );

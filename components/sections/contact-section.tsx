@@ -79,15 +79,15 @@ export function ContactSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-rose text-sm font-medium uppercase tracking-widest mb-4">
-            Contact Us
+            Get in Touch
           </span>
           <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6">
-            Get in Touch{" "}
-            <span className="text-rose">with Us</span>
+            Let&apos;s Talk{" "}
+            <span className="text-rose">Flowers</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Come find us right in the heart of the city! Our doors at Luxe Bloom Boutique 
-            are open 24/7, always ready to welcome you with beautiful, fresh flowers.
+            Come find us right in the heart of Bali! Our doors at Luxe Bloom Boutique 
+            are always open, ready to welcome you with beautiful, fresh flowers.
           </p>
         </div>
 

@@ -1,32 +1,33 @@
 import { Truck, Clock, MapPin, Phone } from "lucide-react";
 
 const deliveryAreas = [
-  "Jakarta Selatan",
-  "Jakarta Pusat",
-  "Jakarta Barat",
-  "Jakarta Timur",
-  "Jakarta Utara",
-  "Tangerang",
-  "Depok",
-  "Bekasi",
-  "Bogor",
+  "Seminyak",
+  "Kuta",
+  "Canggu",
+  "Ubud",
+  "Sanur",
+  "Denpasar",
+  "Jimbaran",
+  "Nusa Dua",
+  "Uluwatu",
+  "Legian",
 ];
 
 const features = [
   {
     icon: Truck,
-    title: "Free Delivery",
-    description: "On orders above Rp 500.000",
+    title: "Island-Wide",
+    description: "Delivery across all Bali",
   },
   {
     icon: Clock,
-    title: "24/7 Available",
-    description: "Order anytime, we're always here",
+    title: "Same Day",
+    description: "Order by 2PM for same-day",
   },
   {
     icon: MapPin,
-    title: "Wide Coverage",
-    description: "Jabodetabek area",
+    title: "All Areas",
+    description: "From Kuta to Ubud",
   },
   {
     icon: Phone,
@@ -48,16 +49,16 @@ export function DeliverySection() {
           <div className="space-y-8">
             <div>
               <span className="inline-block text-gold text-sm font-medium uppercase tracking-widest mb-4">
-                Always Ready
+                Island-Wide Delivery
               </span>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mb-6">
-                24/7 Flower{" "}
-                <span className="text-rose-light">Delivery</span>
+                Same Day Delivery{" "}
+                <span className="text-rose-light">Across Bali</span>
               </h2>
               <p className="text-cream/80 text-lg leading-relaxed max-w-lg">
-                At Luxe Bloom Boutique, we understand that beautiful moments can&apos;t 
-                always wait. That&apos;s why we&apos;re here for you night and day, ready to 
-                deliver fresh flowers whenever you need them.
+                From the beaches of Kuta to the rice terraces of Ubud, we deliver 
+                fresh flowers to every corner of the Island of Gods. Order by 2PM 
+                for same-day delivery.
               </p>
             </div>
 
