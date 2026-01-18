@@ -162,30 +162,17 @@ export function AddProductDialog({ onSuccess }: { onSuccess?: () => void }) {
             />
           </div>
 
-          {/* Price & Stock */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Price (IDR)</label>
-              <Input
-                type="number"
-                name="price"
-                placeholder="850000"
-                required
-                min="0"
-                className="rounded-xl"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Stock</label>
-              <Input
-                type="number"
-                name="stock"
-                placeholder="10"
-                required
-                min="0"
-                className="rounded-xl"
-              />
-            </div>
+          {/* Price */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Price (IDR)</label>
+            <Input
+              type="number"
+              name="price"
+              placeholder="850000"
+              required
+              min="0"
+              className="rounded-xl"
+            />
           </div>
 
           {/* Category */}

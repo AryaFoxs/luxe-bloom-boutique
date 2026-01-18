@@ -8,7 +8,6 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  stock: number;
   category: string;
   image_url: string;
   is_promo?: boolean;
@@ -23,7 +22,7 @@ export async function addProduct(formData: FormData) {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const price = parseInt(formData.get("price") as string);
-    const stock = parseInt(formData.get("stock") as string);
+
     const category = formData.get("category") as string;
     const is_promo = formData.get("is_promo") === "true";
     const imageFile = formData.get("image") as File;
@@ -62,7 +61,6 @@ export async function addProduct(formData: FormData) {
         name,
         description,
         price,
-        stock: stock || 0,
         category,
         image_url,
         is_promo,
@@ -122,7 +120,7 @@ export async function updateProduct(formData: FormData) {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const price = parseInt(formData.get("price") as string);
-    const stock = parseInt(formData.get("stock") as string);
+
     const category = formData.get("category") as string;
     const is_promo = formData.get("is_promo") === "true";
     const imageFile = formData.get("image") as File;
@@ -136,7 +134,6 @@ export async function updateProduct(formData: FormData) {
       name,
       description,
       price,
-      stock: stock || 0,
       category,
       is_promo,
     };

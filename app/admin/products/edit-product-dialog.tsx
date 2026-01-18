@@ -33,7 +33,7 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [stock, setStock] = useState("");
+
   const [category, setCategory] = useState("");
   const [isPromo, setIsPromo] = useState(false);
 
@@ -43,7 +43,7 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
       setName(product.name || "");
       setDescription(product.description || "");
       setPrice(String(product.price) || "");
-      setStock(String(product.stock) || "");
+
       setCategory(product.category || "");
       setIsPromo(product.is_promo || false);
       setImagePreview(product.image_url || null);
@@ -195,34 +195,19 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
             />
           </div>
 
-          {/* Price & Stock */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Price (IDR)</label>
-              <Input
-                type="number"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                placeholder="850000"
-                required
-                min="0"
-                className="rounded-xl"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Stock</label>
-              <Input
-                type="number"
-                name="stock"
-                value={stock}
-                onChange={(e) => setStock(e.target.value)}
-                placeholder="10"
-                required
-                min="0"
-                className="rounded-xl"
-              />
-            </div>
+          {/* Price */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Price (IDR)</label>
+            <Input
+              type="number"
+              name="price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="850000"
+              required
+              min="0"
+              className="rounded-xl"
+            />
           </div>
 
           {/* Category */}
