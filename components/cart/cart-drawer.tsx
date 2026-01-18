@@ -174,7 +174,7 @@ export function CartDrawer() {
                 className="w-full rounded-full bg-rose hover:bg-rose-dark text-white py-6 text-base"
               >
                 <a 
-                  href={`https://wa.me/6282236593493?text=${encodeURIComponent(
+                  href={`https://wa.me/6287825830959?text=${encodeURIComponent(
                     `Hello Luxe Bloom Boutique!\n\nI would like to order:\n\n${items.map(item => {
                       const addonsTotal = item.addons?.reduce((sum, addon) => sum + addon.price * addon.quantity, 0) || 0;
                       const itemTotal = (item.price + addonsTotal) * item.quantity;
