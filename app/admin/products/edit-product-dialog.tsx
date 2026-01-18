@@ -33,7 +33,7 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-
+  const [originalPrice, setOriginalPrice] = useState("");
   const [category, setCategory] = useState("");
   const [isPromo, setIsPromo] = useState(false);
 
@@ -43,7 +43,7 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
       setName(product.name || "");
       setDescription(product.description || "");
       setPrice(String(product.price) || "");
-
+      setOriginalPrice(product.original_price ? String(product.original_price) : "");
       setCategory(product.category || "");
       setIsPromo(product.is_promo || false);
       setImagePreview(product.image_url || null);
@@ -195,19 +195,35 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
             />
           </div>
 
-          {/* Price */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Price (IDR)</label>
-            <Input
-              type="number"
-              name="price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="850000"
-              required
-              min="0"
-              className="rounded-xl"
-            />
+          {/* Pricing */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Sale Price (IDR)</label>
+              <Input
+                type="number"
+                name="price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="850000"
+                required
+                min="0"
+                className="rounded-xl"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Original Price <span className="text-muted-foreground">(optional)</span>
+              </label>
+              <Input
+                type="number"
+                name="original_price"
+                value={originalPrice}
+                onChange={(e) => setOriginalPrice(e.target.value)}
+                placeholder="1000000"
+                min="0"
+                className="rounded-xl"
+              />
+            </div>
           </div>
 
           {/* Category */}

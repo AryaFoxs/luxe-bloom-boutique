@@ -162,17 +162,32 @@ export function AddProductDialog({ onSuccess }: { onSuccess?: () => void }) {
             />
           </div>
 
-          {/* Price */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Price (IDR)</label>
-            <Input
-              type="number"
-              name="price"
-              placeholder="850000"
-              required
-              min="0"
-              className="rounded-xl"
-            />
+          {/* Pricing */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Sale Price (IDR)</label>
+              <Input
+                type="number"
+                name="price"
+                placeholder="850000"
+                required
+                min="0"
+                className="rounded-xl"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Original Price <span className="text-muted-foreground">(optional)</span>
+              </label>
+              <Input
+                type="number"
+                name="original_price"
+                placeholder="1000000"
+                min="0"
+                className="rounded-xl"
+              />
+              <p className="text-xs text-muted-foreground">If set, will show as strikethrough price</p>
+            </div>
           </div>
 
           {/* Category */}
@@ -202,7 +217,7 @@ export function AddProductDialog({ onSuccess }: { onSuccess?: () => void }) {
               className="w-4 h-4 rounded border-gray-300 text-rose focus:ring-rose"
             />
             <label htmlFor="is_promo" className="text-sm font-medium text-foreground">
-              Mark as promotional product
+              Mark as promotional product (shows PROMO badge)
             </label>
           </div>
 

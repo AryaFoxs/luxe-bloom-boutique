@@ -21,6 +21,7 @@ interface Bouquet {
   name: string;
   description: string;
   price: number;
+  originalPrice?: number | null;
   image: string;
   category: string;
   isPromo?: boolean;
@@ -61,7 +62,7 @@ export default function BouquetsPage() {
         const { data, error } = await supabase
           .from("products")
           .select("*")
-          .order("created_at", { ascending: false });
+          .order("price", { ascending: true });
 
         if (error) {
           console.error("Error fetching products:", error);
@@ -73,11 +74,12 @@ export default function BouquetsPage() {
           // Convert Supabase products to Bouquet format, filter out hidden products
           const supabaseProducts: Bouquet[] = data
             .filter((product: { is_hidden?: boolean }) => !product.is_hidden)
-            .map((product: { id: string; name: string; description?: string; price: number; image_url?: string; category?: string; is_promo?: boolean }) => ({
+            .map((product: { id: string; name: string; description?: string; price: number; original_price?: number | null; image_url?: string; category?: string; is_promo?: boolean }) => ({
               id: product.id,
               name: product.name,
               description: product.description || "",
               price: product.price,
+              originalPrice: product.original_price || null,
               image: product.image_url || "/images/placeholder.jpg",
               category: product.category || "Bouquets",
               isPromo: product.is_promo || false,
@@ -251,9 +253,22 @@ export default function BouquetsPage() {
                   <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-rose transition-colors">
                     {bouquet.name}
                   </h3>
-                  <span className="text-rose font-semibold text-sm whitespace-nowrap">
-                    {formatPrice(bouquet.price)}
-                  </span>
+                  <div className="text-right">
+                    {bouquet.originalPrice && bouquet.originalPrice > bouquet.price ? (
+                      <>
+                        <span className="text-muted-foreground text-xs line-through block">
+                          {formatPrice(bouquet.originalPrice)}
+                        </span>
+                        <span className="text-rose font-semibold text-sm">
+                          {formatPrice(bouquet.price)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-rose font-semibold text-sm whitespace-nowrap">
+                        {formatPrice(bouquet.price)}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
                   {bouquet.description}
@@ -327,9 +342,20 @@ export default function BouquetsPage() {
                 </DialogHeader>
                 <div className="flex-1 space-y-4">
                   <div className="inline-block px-4 py-2 bg-rose/10 rounded-full">
-                    <span className="text-rose font-semibold text-lg">
-                      {formatPrice(selectedBouquet.price)}
-                    </span>
+                    {selectedBouquet.originalPrice && selectedBouquet.originalPrice > selectedBouquet.price ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground text-sm line-through">
+                          {formatPrice(selectedBouquet.originalPrice)}
+                        </span>
+                        <span className="text-rose font-semibold text-lg">
+                          {formatPrice(selectedBouquet.price)}
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-rose font-semibold text-lg">
+                        {formatPrice(selectedBouquet.price)}
+                      </span>
+                    )}
                   </div>
                   <div>
                     <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2">

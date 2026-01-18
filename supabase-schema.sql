@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     price INTEGER NOT NULL CHECK (price >= 0),
-    stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
+    original_price INTEGER CHECK (original_price IS NULL OR original_price >= 0),
     category VARCHAR(100) NOT NULL,
     image_url TEXT NOT NULL DEFAULT '/images/placeholder.jpg',
     is_promo BOOLEAN DEFAULT FALSE,

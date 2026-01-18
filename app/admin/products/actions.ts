@@ -8,6 +8,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  original_price?: number | null;
   category: string;
   image_url: string;
   is_promo?: boolean;
@@ -22,7 +23,8 @@ export async function addProduct(formData: FormData) {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const price = parseInt(formData.get("price") as string);
-
+    const original_price_str = formData.get("original_price") as string;
+    const original_price = original_price_str ? parseInt(original_price_str) : null;
     const category = formData.get("category") as string;
     const is_promo = formData.get("is_promo") === "true";
     const imageFile = formData.get("image") as File;
@@ -61,6 +63,7 @@ export async function addProduct(formData: FormData) {
         name,
         description,
         price,
+        original_price,
         category,
         image_url,
         is_promo,
@@ -120,7 +123,8 @@ export async function updateProduct(formData: FormData) {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const price = parseInt(formData.get("price") as string);
-
+    const original_price_str = formData.get("original_price") as string;
+    const original_price = original_price_str ? parseInt(original_price_str) : null;
     const category = formData.get("category") as string;
     const is_promo = formData.get("is_promo") === "true";
     const imageFile = formData.get("image") as File;
@@ -134,6 +138,7 @@ export async function updateProduct(formData: FormData) {
       name,
       description,
       price,
+      original_price,
       category,
       is_promo,
     };
