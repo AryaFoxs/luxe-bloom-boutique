@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Package, Search, Filter, MoreHorizontal, Edit, Trash2, Loader2, Eye, EyeOff } from "lucide-react";
+import { Search, Filter, MoreHorizontal, Edit, Trash2, Loader2, Eye, EyeOff, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -144,10 +144,13 @@ export default function ProductsPage() {
                 </div>
                 <p className="text-rose font-semibold">{formatPrice(product.price)}</p>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Package className="w-4 h-4" />
-                    <span>{product.stock} in stock</span>
-                  </div>
+                  {product.is_promo ? (
+                    <span className="px-2 py-0.5 bg-rose/10 text-rose text-xs font-medium rounded-full">
+                      On Sale
+                    </span>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">Regular</span>
+                  )}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
