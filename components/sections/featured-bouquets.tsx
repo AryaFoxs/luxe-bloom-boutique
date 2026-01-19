@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,79 +11,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ArrowRight, Heart, ShoppingBag, X } from "lucide-react";
-import { useCart } from "@/lib/cart-context";
+import { ArrowRight, Heart, ShoppingBag, Loader2 } from "lucide-react";
 import { AddonsDialog } from "@/components/cart";
+import { createClient } from "@/lib/supabase/client";
 
 interface Bouquet {
   id: string;
   name: string;
   description: string;
   price: number;
+  originalPrice?: number | null;
   image: string;
   isPromo?: boolean;
 }
-
-const bouquets: Bouquet[] = [
-  {
-    id: "violet-blossom",
-    name: "Violet Blossom",
-    description: "Pink roses, lavender chrysanthemums, and vibrant hydrangeas wrapped in elegant perforated cover.",
-    price: 850000,
-    image: "/images/bouquets/IMG20251213170623.jpg",
-    isPromo: true,
-  },
-  {
-    id: "pink-paradise",
-    name: "Pink Paradise",
-    description: "Stunning bouquet of lilies, roses, and soft pink blooms—perfect for romantic gestures.",
-    price: 1200000,
-    image: "/images/bouquets/IMG20251217142845.jpg",
-  },
-  {
-    id: "pastel-haze",
-    name: "Pastel Haze",
-    description: "Dreamy bouquet of hydrangeas, gerberas, and soft pink blooms for gentle expressions.",
-    price: 950000,
-    image: "/images/bouquets/IMG20251217151154.jpg",
-    isPromo: true,
-  },
-  {
-    id: "rose-royale",
-    name: "Rose Royale",
-    description: "One hundred stunning premium roses in deep red, symbolizing eternal love and passion.",
-    price: 2500000,
-    image: "/images/bouquets/IMG20251222164127.jpg",
-  },
-  {
-    id: "blush-rose-box",
-    name: "Blush Rose Box",
-    description: "Charming box of pastel roses in soft blush tones, perfect for heartfelt moments.",
-    price: 750000,
-    image: "/images/bouquets/IMG20251224202736.jpg",
-  },
-  {
-    id: "sunny-cheer",
-    name: "Sunny Cheer",
-    description: "Radiant bouquet with orange gerberas, white lilies, and cheerful yellow blooms.",
-    price: 680000,
-    image: "/images/bouquets/IMG20251226095117.jpg",
-  },
-  {
-    id: "sunshine-love",
-    name: "Sunshine Love",
-    description: "Joyful burst of colors featuring bright blooms arranged in a sky blue box.",
-    price: 720000,
-    image: "/images/bouquets/IMG-20251226-WA0009.jpg",
-  },
-  {
-    id: "cinta-kuning",
-    name: "Cinta Kuning",
-    description: "Brighten their day with radiant mix of yellow lilies and cheerful blooms.",
-    price: 650000,
-    image: "/images/bouquets/IMG-20251231-WA0014.jpg",
-  },
-];
 
 function formatPrice(price: number): string {
   return new Intl.NumberFormat("id-ID", {
@@ -138,9 +78,22 @@ function BouquetCard({
           <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-rose transition-colors">
             {bouquet.name}
           </h3>
-          <span className="text-rose font-semibold text-sm whitespace-nowrap">
-            {formatPrice(bouquet.price)}
-          </span>
+          <div className="text-right">
+            {bouquet.originalPrice && bouquet.originalPrice > bouquet.price ? (
+              <>
+                <span className="text-muted-foreground text-xs line-through block">
+                  {formatPrice(bouquet.originalPrice)}
+                </span>
+                <span className="text-rose font-semibold text-sm">
+                  {formatPrice(bouquet.price)}
+                </span>
+              </>
+            ) : (
+              <span className="text-rose font-semibold text-sm whitespace-nowrap">
+                {formatPrice(bouquet.price)}
+              </span>
+            )}
+          </div>
         </div>
         
         {/* Description */}
@@ -217,9 +170,20 @@ function BouquetDetailDialog({
             <div className="flex-1 space-y-4 md:space-y-6">
               {/* Price */}
               <div className="inline-block px-4 py-2 bg-rose/10 rounded-full">
-                <span className="text-rose font-semibold text-lg md:text-xl">
-                  {formatPrice(bouquet.price)}
-                </span>
+                {bouquet.originalPrice && bouquet.originalPrice > bouquet.price ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground text-sm line-through">
+                      {formatPrice(bouquet.originalPrice)}
+                    </span>
+                    <span className="text-rose font-semibold text-lg md:text-xl">
+                      {formatPrice(bouquet.price)}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-rose font-semibold text-lg md:text-xl">
+                    {formatPrice(bouquet.price)}
+                  </span>
+                )}
               </div>
 
               {/* Description */}
@@ -290,6 +254,59 @@ export function FeaturedBouquets() {
   const [selectedBouquet, setSelectedBouquet] = useState<Bouquet | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [addonsBouquet, setAddonsBouquet] = useState<Bouquet | null>(null);
+  const [bouquets, setBouquets] = useState<Bouquet[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from Supabase - get 6 random products
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("is_hidden", false)
+          .order("created_at", { ascending: false })
+          .limit(6);
+
+        if (error) {
+          console.error("Error fetching products:", error);
+          setLoading(false);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          const supabaseProducts: Bouquet[] = data.map(
+            (product: {
+              id: string;
+              name: string;
+              description?: string;
+              price: number;
+              original_price?: number | null;
+              image_url?: string;
+              is_promo?: boolean;
+            }) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description || "",
+              price: product.price,
+              originalPrice: product.original_price || null,
+              image: product.image_url || "/images/placeholder.jpg",
+              isPromo: product.is_promo || false,
+            })
+          );
+
+          setBouquets(supabaseProducts);
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   const handleViewDetails = (bouquet: Bouquet) => {
     setSelectedBouquet(bouquet);
@@ -323,17 +340,28 @@ export function FeaturedBouquets() {
           </p>
         </div>
 
-        {/* Bouquet Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {bouquets.map((bouquet) => (
-            <BouquetCard 
-              key={bouquet.id} 
-              bouquet={bouquet} 
-              onViewDetails={handleViewDetails}
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-rose" />
+          </div>
+        ) : bouquets.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-muted-foreground">No products available at the moment.</p>
+          </div>
+        ) : (
+          /* Bouquet Grid */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {bouquets.map((bouquet) => (
+              <BouquetCard 
+                key={bouquet.id} 
+                bouquet={bouquet} 
+                onViewDetails={handleViewDetails}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        )}
 
         {/* View All Button */}
         <div className="text-center mt-14">
@@ -367,4 +395,3 @@ export function FeaturedBouquets() {
     </section>
   );
 }
-

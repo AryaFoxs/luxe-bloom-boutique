@@ -1,60 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, ShoppingBag, Sparkles } from "lucide-react";
-import { useCart } from "@/lib/cart-context";
+import { Heart, ShoppingBag, Sparkles, Loader2 } from "lucide-react";
 import { AddonsDialog } from "@/components/cart";
+import { createClient } from "@/lib/supabase/client";
 
 interface Bouquet {
   id: string;
   name: string;
   description: string;
   price: number;
-  originalPrice?: number;
+  originalPrice?: number | null;
   image: string;
   discount?: number;
 }
 
-const saleBouquets: Bouquet[] = [
-  {
-    id: "violet-blossom",
-    name: "Violet Blossom",
-    description: "Pink roses, lavender chrysanthemums, and vibrant hydrangeas wrapped in elegant perforated cover.",
-    price: 680000,
-    originalPrice: 850000,
-    discount: 20,
-    image: "/images/bouquets/IMG20251213170623.jpg",
-  },
-  {
-    id: "pastel-haze",
-    name: "Pastel Haze",
-    description: "Dreamy bouquet of hydrangeas, gerberas, and soft pink blooms for gentle expressions.",
-    price: 760000,
-    originalPrice: 950000,
-    discount: 20,
-    image: "/images/bouquets/IMG20251217151154.jpg",
-  },
-  {
-    id: "sunny-cheer",
-    name: "Sunny Cheer",
-    description: "Radiant bouquet with orange gerberas, white lilies, and cheerful yellow blooms.",
-    price: 544000,
-    originalPrice: 680000,
-    discount: 20,
-    image: "/images/bouquets/IMG20251226095117.jpg",
-  },
-  {
-    id: "sunshine-love",
-    name: "Sunshine Love",
-    description: "Joyful burst of colors featuring bright blooms arranged in a sky blue box.",
-    price: 576000,
-    originalPrice: 720000,
-    discount: 20,
-    image: "/images/bouquets/IMG-20251226-WA0009.jpg",
-  },
+// List of product names to show in Signature Bouquets section
+const SIGNATURE_BOUQUET_NAMES = [
+  "Petal Blush",
+  "Mystic Purple",
+  "Imperial Pink",
+  "Midnight Blue",
 ];
 
 function formatPrice(price: number): string {
@@ -63,6 +32,11 @@ function formatPrice(price: number): string {
     currency: "IDR",
     minimumFractionDigits: 0,
   }).format(price);
+}
+
+function calculateDiscount(price: number, originalPrice: number | null | undefined): number | undefined {
+  if (!originalPrice || originalPrice <= price) return undefined;
+  return Math.round(((originalPrice - price) / originalPrice) * 100);
 }
 
 function SaleProductCard({
@@ -113,7 +87,7 @@ function SaleProductCard({
           <span className="text-rose font-bold text-lg">
             {formatPrice(bouquet.price)}
           </span>
-          {bouquet.originalPrice && (
+          {bouquet.originalPrice && bouquet.originalPrice > bouquet.price && (
             <span className="text-muted-foreground text-sm line-through">
               {formatPrice(bouquet.originalPrice)}
             </span>
@@ -141,6 +115,64 @@ function SaleProductCard({
 
 export function OnSaleSection() {
   const [addonsBouquet, setAddonsBouquet] = useState<Bouquet | null>(null);
+  const [bouquets, setBouquets] = useState<Bouquet[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from Supabase
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("name", SIGNATURE_BOUQUET_NAMES);
+
+        if (error) {
+          console.error("Error fetching products:", error);
+          setLoading(false);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          // Convert Supabase products to Bouquet format
+          const supabaseProducts: Bouquet[] = data.map(
+            (product: {
+              id: string;
+              name: string;
+              description?: string;
+              price: number;
+              original_price?: number | null;
+              image_url?: string;
+            }) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description || "",
+              price: product.price,
+              originalPrice: product.original_price || null,
+              image: product.image_url || "/images/placeholder.jpg",
+              discount: calculateDiscount(product.price, product.original_price),
+            })
+          );
+
+          // Sort by the order defined in SIGNATURE_BOUQUET_NAMES
+          const sortedProducts = supabaseProducts.sort((a, b) => {
+            const indexA = SIGNATURE_BOUQUET_NAMES.indexOf(a.name);
+            const indexB = SIGNATURE_BOUQUET_NAMES.indexOf(b.name);
+            return indexA - indexB;
+          });
+
+          setBouquets(sortedProducts);
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (bouquet: Bouquet) => {
     setAddonsBouquet(bouquet);
@@ -165,16 +197,27 @@ export function OnSaleSection() {
           </p>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {saleBouquets.map((bouquet) => (
-            <SaleProductCard
-              key={bouquet.id}
-              bouquet={bouquet}
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-rose" />
+          </div>
+        ) : bouquets.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-muted-foreground">No signature bouquets available at the moment.</p>
+          </div>
+        ) : (
+          /* Product Grid */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {bouquets.map((bouquet) => (
+              <SaleProductCard
+                key={bouquet.id}
+                bouquet={bouquet}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Add-ons Dialog */}

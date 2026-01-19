@@ -14,7 +14,7 @@ const quickLinks = [
     icon: MessageCircle,
     title: "WhatsApp",
     subtitle: "Chat with us instantly",
-    href: "https://wa.me/6281234567890?text=Hello,%20I'd%20like%20to%20inquire%20about%20your%20services.",
+    href: "https://wa.me/6287825830959?text=Hello,%20I'd%20like%20to%20inquire%20about%20your%20services.",
     color: "bg-green-500",
   },
   {
@@ -146,7 +146,7 @@ export default function ContactPage() {
                 size="lg"
                 className="rounded-full px-8 bg-rose hover:bg-rose-dark text-white shadow-lg"
               >
-                <Link href="https://wa.me/6281234567890?text=Hello,%20I%20have%20a%20question%20about%20your%20services." target="_blank">
+                <Link href="https://wa.me/6287825830959?text=Hello,%20I%20have%20a%20question%20about%20your%20services." target="_blank">
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Ask Us Anything
                 </Link>

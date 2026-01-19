@@ -22,7 +22,7 @@ const upgrades: Upgrade[] = [
     name: "Premium Chocolate Box",
     description: "Exquisite Belgian chocolates in a luxury gift box",
     price: 350000,
-    image: "/images/bouquets/IMG20251224202736.jpg",
+    image: "/images/add-ons/Choholate.webp",
     category: "chocolate",
   },
   {
@@ -30,7 +30,7 @@ const upgrades: Upgrade[] = [
     name: "Red Wine Bottle",
     description: "Premium imported red wine to complement your flowers",
     price: 650000,
-    image: "/images/bouquets/IMG20251222164127.jpg",
+    image: "/images/add-ons/Wine.avif",
     category: "wine",
   },
   {
@@ -38,7 +38,7 @@ const upgrades: Upgrade[] = [
     name: "Balloon Bouquet",
     description: "Colorful helium balloons for extra celebration",
     price: 150000,
-    image: "/images/bouquets/IMG-20251226-WA0009.jpg",
+    image: "/images/add-ons/Balloon.webp",
     category: "balloon",
   },
   {
@@ -46,7 +46,7 @@ const upgrades: Upgrade[] = [
     name: "Giant Teddy Bear",
     description: "Soft and cuddly teddy bear, perfect for hugs",
     price: 450000,
-    image: "/images/bouquets/IMG20251217151154.jpg",
+    image: "/images/add-ons/Teddy Bear.webp",
     category: "teddy",
   },
 ];

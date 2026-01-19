@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, ShoppingBag, Crown } from "lucide-react";
-import { useCart } from "@/lib/cart-context";
+import { Heart, ShoppingBag, Crown, Loader2 } from "lucide-react";
 import { AddonsDialog } from "@/components/cart";
+import { createClient } from "@/lib/supabase/client";
 
 interface Package {
   id: string;
@@ -17,31 +17,19 @@ interface Package {
   includes: string[];
 }
 
-const ballerPackages: Package[] = [
-  {
-    id: "rose-royale-100",
-    name: "Rose Royale 100",
-    description: "One hundred stunning premium roses in deep red, symbolizing eternal love and passion.",
-    price: 2500000,
-    image: "/images/bouquets/IMG20251222164127.jpg",
-    includes: ["100 Premium Red Roses", "Luxury Wrapping", "Message Card", "Same-Day Delivery"],
-  },
-  {
-    id: "ultimate-romance",
-    name: "Ultimate Romance",
-    description: "The grandest gesture of love—200 roses with champagne and chocolates.",
-    price: 5500000,
-    image: "/images/bouquets/IMG20251217142845.jpg",
-    includes: ["200 Premium Roses", "Champagne Bottle", "Chocolate Box", "Giant Teddy", "VIP Delivery"],
-  },
-  {
-    id: "proposal-package",
-    name: "Proposal Package",
-    description: "Everything for the perfect proposal—flowers, candles, rose petals path.",
-    price: 8500000,
-    image: "/images/bouquets/IMG20251213170623.jpg",
-    includes: ["Premium Bouquet", "Rose Petals Path", "Candle Setup", "Balloon Arch", "Photography Assist"],
-  },
+// List of product names to show in Grand Gestures section
+const GRAND_GESTURE_NAMES = [
+  "Luxe Candy Symphony",
+  "Royal Roses Basket",
+  "301 Holland Roses Mix",
+];
+
+// Default includes for grand gesture packages
+const defaultIncludes = [
+  "Premium Flowers",
+  "Luxury Wrapping",
+  "Message Card",
+  "Same-Day Delivery",
 ];
 
 function formatPrice(price: number): string {
@@ -132,6 +120,62 @@ function PackageCard({
 
 export function BallerPackagesSection() {
   const [addonsPkg, setAddonsPkg] = useState<Package | null>(null);
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from Supabase
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("name", GRAND_GESTURE_NAMES);
+
+        if (error) {
+          console.error("Error fetching products:", error);
+          setLoading(false);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          // Convert Supabase products to Package format
+          const supabaseProducts: Package[] = data.map(
+            (product: {
+              id: string;
+              name: string;
+              description?: string;
+              price: number;
+              image_url?: string;
+            }) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description || "",
+              price: product.price,
+              image: product.image_url || "/images/placeholder.jpg",
+              includes: defaultIncludes,
+            })
+          );
+
+          // Sort by the order defined in GRAND_GESTURE_NAMES
+          const sortedProducts = supabaseProducts.sort((a, b) => {
+            const indexA = GRAND_GESTURE_NAMES.indexOf(a.name);
+            const indexB = GRAND_GESTURE_NAMES.indexOf(b.name);
+            return indexA - indexB;
+          });
+
+          setPackages(sortedProducts);
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (pkg: Package) => {
     setAddonsPkg(pkg);
@@ -157,16 +201,27 @@ export function BallerPackagesSection() {
           </p>
         </div>
 
-        {/* Package Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {ballerPackages.map((pkg) => (
-            <PackageCard
-              key={pkg.id}
-              pkg={pkg}
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-gold" />
+          </div>
+        ) : packages.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-muted-foreground">No grand gesture packages available at the moment.</p>
+          </div>
+        ) : (
+          /* Package Grid */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {packages.map((pkg) => (
+              <PackageCard
+                key={pkg.id}
+                pkg={pkg}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Add-ons Dialog */}

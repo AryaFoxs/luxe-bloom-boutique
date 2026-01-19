@@ -28,7 +28,7 @@ const services: Service[] = [
       "Perfect creative activity or unique gift",
     ],
     ctaText: "Book Your Session",
-    ctaLink: "https://wa.me/6281234567890?text=Hello,%20I'd%20like%20to%20book%20a%20Build%20Your%20Own%20Bloom%20session.",
+    ctaLink: "https://wa.me/6287825830959?text=Hello,%20I'd%20like%20to%20book%20a%20Build%20Your%20Own%20Bloom%20session.",
     gradient: "from-rose/10 to-rose-light/10",
   },
   {
@@ -44,7 +44,7 @@ const services: Service[] = [
       "Tailored to your unique wedding vision",
     ],
     ctaText: "Book Consultation",
-    ctaLink: "https://wa.me/6281234567890?text=Hello,%20I'd%20like%20to%20book%20a%20wedding%20florals%20consultation.",
+    ctaLink: "https://wa.me/6287825830959?text=Hello,%20I'd%20like%20to%20book%20a%20wedding%20florals%20consultation.",
     gradient: "from-gold/10 to-gold-light/10",
   },
   {
@@ -60,7 +60,7 @@ const services: Service[] = [
       "Professional setup and delivery",
     ],
     ctaText: "Get Quote",
-    ctaLink: "https://wa.me/6281234567890?text=Hello,%20I'd%20like%20to%20get%20a%20quote%20for%20event%20floral%20styling.",
+    ctaLink: "https://wa.me/6287825830959?text=Hello,%20I'd%20like%20to%20get%20a%20quote%20for%20event%20floral%20styling.",
     gradient: "from-sage/10 to-sage-light/10",
   },
 ];

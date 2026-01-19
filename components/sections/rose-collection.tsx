@@ -9,7 +9,7 @@ const roseProducts = [
     originalPrice: 850000,
     salePrice: 599000,
     discount: 30,
-    image: "/images/bouquets/IMG-20251231-WA0014 (1).jpg",
+    image: "/images/rose-collection/WhatsApp Image 2026-01-12 at 21.12.05.jpeg",
     badge: "Best Seller"
   },
   { 
@@ -18,7 +18,7 @@ const roseProducts = [
     originalPrice: 750000,
     salePrice: 525000,
     discount: 30,
-    image: "/images/bouquets/IMG-20251231-WA0013 (1).jpg",
+    image: "/images/rose-collection/IMG_20260114_132923.jpg",
     badge: null
   },
   { 
@@ -27,7 +27,7 @@ const roseProducts = [
     originalPrice: 950000,
     salePrice: 712500,
     discount: 25,
-    image: "/images/bouquets/IMG-20251231-WA0017.jpg",
+    image: "/images/rose-collection/IMG_5209.JPG",
     badge: "New"
   },
   { 
@@ -36,7 +36,7 @@ const roseProducts = [
     originalPrice: 680000,
     salePrice: 476000,
     discount: 30,
-    image: "/images/bouquets/IMG-20251231-WA0016.jpg",
+    image: "/images/rose-collection/IMG_5211.JPG",
     badge: null
   },
 ];

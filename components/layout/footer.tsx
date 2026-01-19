@@ -58,7 +58,7 @@ export function Footer() {
             {/* Social Links */}
             <div className="flex gap-4">
               <a
-                href="https://wa.me/6281234567890"
+                href="https://wa.me/6287825830959"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-rose transition-all duration-300 flex items-center justify-center group"
@@ -147,11 +147,11 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="tel:+6281234567890"
+                  href="tel:+6287825830959"
                   className="flex items-center gap-3 text-cream/70 hover:text-rose-light transition-colors duration-300 text-sm"
                 >
                   <Phone className="w-4 h-4 flex-shrink-0 text-rose-light" />
-                  <span>+62 812 3456 7890</span>
+                  <span>+62 878 2583 0959</span>
                 </a>
               </li>
             </ul>

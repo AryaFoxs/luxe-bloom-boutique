@@ -89,7 +89,7 @@ export function BespokeServiceSection() {
               className="rounded-full px-8 py-6 bg-rose hover:bg-rose-dark text-white shadow-xl hover:shadow-rose/30 transition-all duration-300 group"
             >
               <Link
-                href="https://wa.me/6281234567890?text=Hello,%20I'd%20like%20to%20order%20a%20custom%20bouquet."
+                href="https://wa.me/6287825830959?text=Hello,%20I'd%20like%20to%20order%20a%20custom%20bouquet."
                 target="_blank"
                 rel="noopener noreferrer"
               >

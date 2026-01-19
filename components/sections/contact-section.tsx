@@ -33,8 +33,8 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Call or WhatsApp",
-    lines: ["+62 812 3456 7890", "+62 821 9876 5432"],
-    link: "https://wa.me/6281234567890",
+    lines: ["+62 878 2583 0959"],
+    link: "https://wa.me/6287825830959",
   },
   {
     icon: Clock,
@@ -64,7 +64,7 @@ export function ContactSection() {
     );
     
     // Open WhatsApp with the message
-    window.open(`https://wa.me/6281234567890?text=${message}`, "_blank");
+    window.open(`https://wa.me/6287825830959?text=${message}`, "_blank");
     
     reset();
   };
@@ -200,7 +200,7 @@ export function ContactSection() {
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+62 812 3456 7890"
+                  placeholder="+62 878 2583 0959"
                   className="rounded-xl border-border bg-white focus:border-rose focus:ring-rose"
                   {...register("phone")}
                 />
@@ -254,7 +254,7 @@ export function ContactSection() {
                 className="w-full rounded-full border-2 border-sage text-sage hover:bg-sage hover:text-white transition-all duration-300"
               >
                 <a
-                  href="https://wa.me/6281234567890?text=Hello,%20I'd%20like%20to%20inquire%20about%20your%20services."
+                  href="https://wa.me/6287825830959?text=Hello,%20I'd%20like%20to%20inquire%20about%20your%20services."
                   target="_blank"
                   rel="noopener noreferrer"
                 >
