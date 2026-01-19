@@ -151,29 +151,8 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute top-2 right-2 flex gap-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setTempImageSrc(imagePreview);
-                          setShowCropDialog(true);
-                        }}
-                        className="p-1.5 bg-white rounded-full shadow-lg hover:bg-gray-100"
-                        title="Re-crop image"
-                      >
-                        <Crop className="w-4 h-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={clearImage}
-                        className="p-1.5 bg-white rounded-full shadow-lg hover:bg-gray-100"
-                        title="Remove image"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                    {/* Overlay to change image */}
-                    <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+                    {/* Overlay to change image - z-10 */}
+                    <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity cursor-pointer z-10">
                       <div className="text-center text-white">
                         <Upload className="w-6 h-6 mx-auto mb-1" />
                         <span className="text-sm">Change Image</span>
@@ -185,6 +164,34 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
                         className="hidden"
                       />
                     </label>
+                    {/* Crop and remove buttons - z-20 (above overlay) */}
+                    <div className="absolute top-2 right-2 flex gap-1 z-20">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setTempImageSrc(imagePreview);
+                          setShowCropDialog(true);
+                        }}
+                        className="p-1.5 bg-white rounded-full shadow-lg hover:bg-gray-100"
+                        title="Re-crop image"
+                      >
+                        <Crop className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          clearImage();
+                        }}
+                        className="p-1.5 bg-white rounded-full shadow-lg hover:bg-gray-100"
+                        title="Remove image"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-gray-200 hover:border-rose/50 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
@@ -333,7 +340,7 @@ export function EditProductDialog({ product, isOpen, onClose, onSuccess }: EditP
             setTempImageSrc(null);
           }}
           onCropComplete={handleCropComplete}
-          aspectRatio={2 / 3}
+          aspectRatio={1}
         />
       )}
     </>

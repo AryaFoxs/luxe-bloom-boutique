@@ -46,7 +46,7 @@ export function ImageCropDialog({
   isOpen,
   onClose,
   onCropComplete,
-  aspectRatio = 2 / 3,
+  aspectRatio = 1,
 }: ImageCropDialogProps) {
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<Crop>();
@@ -146,6 +146,7 @@ export function ImageCropDialog({
               ref={imgRef}
               src={imageSrc}
               alt="Crop preview"
+              crossOrigin="anonymous"
               onLoad={onImageLoad}
               className="max-w-full max-h-[60vh] object-contain mx-auto"
             />
@@ -153,7 +154,7 @@ export function ImageCropDialog({
         </div>
 
         <p className="text-sm text-muted-foreground text-center">
-          Drag to adjust the crop area. The image will be cropped to 2:3 portrait format.
+          Drag to adjust the crop area. The image will be cropped to square format.
         </p>
 
         <DialogFooter className="flex gap-2">

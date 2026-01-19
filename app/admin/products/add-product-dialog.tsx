@@ -131,11 +131,11 @@ export function AddProductDialog({ onSuccess }: { onSuccess?: () => void }) {
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground flex items-center gap-2">
                 Product Image
-                <span className="text-xs text-muted-foreground font-normal">(will be cropped to 2:3)</span>
+                <span className="text-xs text-muted-foreground font-normal">(will be cropped to square)</span>
               </label>
               <div className="relative">
                 {imagePreview ? (
-                  <div className="relative aspect-[2/3] max-w-[200px] rounded-xl overflow-hidden bg-gray-100">
+                  <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
                     <Image
                       src={imagePreview}
                       alt="Preview"
@@ -165,10 +165,10 @@ export function AddProductDialog({ onSuccess }: { onSuccess?: () => void }) {
                     </div>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center aspect-[2/3] max-w-[200px] rounded-xl border-2 border-dashed border-gray-200 hover:border-rose/50 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-gray-200 hover:border-rose/50 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
                     <Upload className="w-8 h-8 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-500">Click to upload image</span>
-                    <span className="text-xs text-gray-400 mt-1">Image will be cropped to 2:3</span>
+                    <span className="text-xs text-gray-400 mt-1">Image will be cropped to square</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -300,7 +300,7 @@ export function AddProductDialog({ onSuccess }: { onSuccess?: () => void }) {
             setTempImageSrc(null);
           }}
           onCropComplete={handleCropComplete}
-          aspectRatio={2 / 3}
+          aspectRatio={1}
         />
       )}
     </>
