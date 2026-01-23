@@ -2,25 +2,37 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Luxe Bloom Boutique | Premium Florist & Flower Delivery",
-  description: "Your trusted boutique florist offering fresh flowers for all occasions. Order online for same-day delivery. Premium bouquets, wedding florals, and custom arrangements.",
-  keywords: ["florist", "flower delivery", "bouquets", "wedding flowers", "flower shop", "premium flowers", "Jakarta florist"],
+  metadataBase: new URL('https://www.luxebloombali.com'),
+  title: "Luxe Bloom Boutique | Premium Florist Bali & Flower Delivery",
+  description: "Premium florist in Bali offering fresh flowers for all occasions. Order online for same-day delivery. Luxury bouquets, wedding florals, and custom arrangements.",
+  keywords: ["florist Bali", "flower delivery Bali", "bouquets", "wedding flowers Bali", "flower shop Bali", "premium flowers", "Bali florist", "luxury flowers Bali"],
   authors: [{ name: "Luxe Bloom Boutique" }],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: "Luxe Bloom Boutique | Premium Florist & Flower Delivery",
-    description: "Your trusted boutique florist offering fresh flowers for all occasions. Order online for same-day delivery.",
+    title: "Luxe Bloom Boutique | Premium Florist Bali & Flower Delivery",
+    description: "Premium florist in Bali offering fresh flowers for all occasions. Order online for same-day delivery.",
     type: "website",
     locale: "id_ID",
     siteName: "Luxe Bloom Boutique",
+    url: 'https://www.luxebloombali.com',
   },
   twitter: {
     card: "summary_large_image",
-    title: "Luxe Bloom Boutique | Premium Florist & Flower Delivery",
-    description: "Your trusted boutique florist offering fresh flowers for all occasions.",
+    title: "Luxe Bloom Boutique | Premium Florist Bali & Flower Delivery",
+    description: "Premium florist in Bali offering fresh flowers for all occasions.",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
