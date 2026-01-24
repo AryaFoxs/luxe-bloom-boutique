@@ -16,7 +16,7 @@ export function BespokeServiceSection() {
           <div className="relative order-2 lg:order-1">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="/images/bouquets/IMG20251217142845.jpg"
+                src="/images/bouquets/WhatsApp Image 2026-01-12 at 21.12.05.jpeg"
                 alt="Custom Bouquet Service"
                 fill
                 className="object-cover"
