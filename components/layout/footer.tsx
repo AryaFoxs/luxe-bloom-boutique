@@ -76,7 +76,7 @@ export function Footer() {
                 <Instagram className="w-5 h-5 text-cream group-hover:scale-110 transition-transform" />
               </a>
               <a
-                href="https://maps.google.com"
+                href="https://maps.app.goo.gl/5Fbzc5PVdy12mqyQ7"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-rose transition-all duration-300 flex items-center justify-center group"
@@ -127,7 +127,7 @@ export function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://maps.google.com"
+                  href="https://maps.app.goo.gl/5Fbzc5PVdy12mqyQ7"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-cream/70 hover:text-rose-light transition-colors duration-300 text-sm group"

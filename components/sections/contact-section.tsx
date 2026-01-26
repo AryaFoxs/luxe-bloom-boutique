@@ -22,7 +22,7 @@ const contactInfo = [
     icon: MapPin,
     title: "Visit Our Boutique",
     lines: ["Jalan Teuku Umar No.43", "Denpasar Barat"],
-    link: "https://maps.google.com",
+    link: "https://maps.app.goo.gl/5Fbzc5PVdy12mqyQ7",
   },
   {
     icon: Mail,
@@ -135,7 +135,7 @@ export function ContactSection() {
                   <MapPin className="w-12 h-12 text-rose mx-auto mb-3" />
                   <p className="text-muted-foreground font-medium">Interactive Map</p>
                   <a
-                    href="https://maps.google.com"
+                    href="https://maps.app.goo.gl/5Fbzc5PVdy12mqyQ7"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-rose hover:underline text-sm"
