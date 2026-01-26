@@ -21,14 +21,14 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Visit Our Boutique",
-    lines: ["Jl. Bunga Indah No.123", "Jakarta Selatan, 12345"],
+    lines: ["Jalan Teuku Umar No.43", "Denpasar Barat"],
     link: "https://maps.google.com",
   },
   {
     icon: Mail,
     title: "Email Us",
-    lines: ["hello@luxebloomboutique.com", "orders@luxebloomboutique.com"],
-    link: "mailto:hello@luxebloomboutique.com",
+    lines: ["luxebloomboutique26@gmail.com"],
+    link: "mailto:luxebloomboutique26@gmail.com",
   },
   {
     icon: Phone,

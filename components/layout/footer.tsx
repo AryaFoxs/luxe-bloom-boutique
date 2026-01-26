@@ -133,16 +133,16 @@ export function Footer() {
                   className="flex items-start gap-3 text-cream/70 hover:text-rose-light transition-colors duration-300 text-sm group"
                 >
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-rose-light" />
-                  <span>Jl. Bunga Indah No.123, Jakarta Selatan</span>
+                  <span>Jalan Teuku Umar No.43, Denpasar Barat</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:hello@luxebloomboutique.com"
+                  href="mailto:luxebloomboutique26@gmail.com"
                   className="flex items-center gap-3 text-cream/70 hover:text-rose-light transition-colors duration-300 text-sm"
                 >
                   <Mail className="w-4 h-4 flex-shrink-0 text-rose-light" />
-                  <span>hello@luxebloomboutique.com</span>
+                  <span>luxebloomboutique26@gmail.com</span>
                 </a>
               </li>
               <li>
