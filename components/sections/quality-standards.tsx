@@ -89,7 +89,8 @@ export function QualityStandards() {
           })}
         </div>
 
-        {/* Trust Badge */}
+        {/* Trust Badge - Hidden temporarily, business is still new */}
+        {/*
         <div className="mt-16 text-center">
           <div className="inline-flex items-center gap-4 px-8 py-4 bg-burgundy/5 rounded-full border border-burgundy/10">
             <div className="flex -space-x-2">
@@ -106,6 +107,7 @@ export function QualityStandards() {
             </div>
           </div>
         </div>
+        */}
       </div>
     </section>
   );

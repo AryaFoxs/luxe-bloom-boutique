@@ -4,23 +4,22 @@ import { MapPin, Mail, Phone, Instagram, MessageCircle } from "lucide-react";
 
 const shopLinks = [
   { href: "/bouquets", label: "All Bouquets" },
-  { href: "/wedding-flowers", label: "Wedding Flowers" },
-  { href: "/corporate", label: "Corporate Arrangements" },
-  { href: "/gift-cards", label: "Gift Cards" },
+  { href: "/bouquets?category=roses", label: "Roses Collection" },
+  { href: "/bouquets?category=mixed", label: "Mixed Bouquets" },
+  { href: "/bouquets?category=premium", label: "Premium Collection" },
 ];
 
 const serviceLinks = [
-  { href: "#services", label: "Subscriptions" },
-  { href: "#services", label: "Event Planning" },
-  { href: "#services", label: "Custom Designs" },
-  { href: "#services", label: "Workshops" },
+  { href: "/services", label: "Our Services" },
+  { href: "/services#custom-bouquet", label: "Custom Bouquet" },
+  { href: "/services#delivery", label: "Delivery Service" },
+  { href: "/services#event", label: "Event Decoration" },
 ];
 
 const infoLinks = [
   { href: "/about", label: "About Us" },
-  { href: "/delivery", label: "Delivery Info" },
-  { href: "/care-guide", label: "Care Guide" },
-  { href: "/faq", label: "FAQ" },
+  { href: "/contact", label: "Contact Us" },
+  { href: "https://wa.me/6287825830959", label: "WhatsApp Us" },
 ];
 
 export function Footer() {

@@ -37,8 +37,8 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Main Services */}
-      <ServicesSection />
+      {/* Main Services - Hidden temporarily, will enable next month */}
+      {/* <ServicesSection /> */}
 
       {/* Bespoke Service */}
       <BespokeServiceSection />

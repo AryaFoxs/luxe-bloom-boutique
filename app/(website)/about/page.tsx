@@ -63,32 +63,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Achievements Counter */}
-      <section className="py-12 bg-burgundy">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {achievements.map((item) => {
-              const IconComponent = item.icon;
-              return (
-                <div key={item.label} className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-full bg-white/10 flex items-center justify-center mb-3">
-                    <IconComponent className="w-7 h-7 text-gold" />
-                  </div>
-                  <div className="font-serif text-3xl font-bold text-white mb-1">
-                    {item.value}
-                  </div>
-                  <div className="text-white/70 text-sm">{item.label}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* About Section from component */}
       <AboutSection />
 
-      {/* Our Team */}
+      {/* Our Team - Hidden temporarily, team members not finalized yet */}
+      {/*
       <section className="py-20 lg:py-28 bg-cream">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -129,6 +108,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      */}
 
       {/* Quality Standards */}
       <QualityStandards />
