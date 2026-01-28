@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ShoppingBag, Wine, Candy, PartyPopper } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/format";
 
 interface Upgrade {
   id: string;
@@ -57,14 +58,6 @@ const categoryIcons = {
   balloon: PartyPopper,
   teddy: "🧸",
 };
-
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(price);
-}
 
 function UpgradeCard({
   upgrade,
@@ -144,7 +137,7 @@ export function UpgradesSection() {
   };
 
   return (
-    <section id="upgrades" className="py-20 lg:py-28 bg-cream">
+    <section id="upgrades" className="py-12 lg:py-20 bg-cream">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">

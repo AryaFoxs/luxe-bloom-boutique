@@ -4,35 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
 import { Loader2 } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number | null;
-  image: string;
-  discount?: number;
-  badge?: string | null;
-}
-
-const TARGET_PRODUCT_NAMES = [
-  "171 holland candy roses basket",
-  "171 holland roses basket",
-  "171 royal roses basket",
-  "301 holland roses mix"
-];
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
-};
+import { formatPrice, calculateDiscount } from "@/lib/format";
+import { ROSE_COLLECTION_NAMES } from "@/lib/constants";
+import { getProductsByNames, type Product } from "@/lib/services/products";
 
 export function RoseCollection() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -41,52 +16,16 @@ export function RoseCollection() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const supabase = createClient();
-        // Fetch all products to ensure we don't miss any due to exact string matching issues
-        const { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .order('name');
+        const data = await getProductsByNames(ROSE_COLLECTION_NAMES);
+        
+        // Sort by the order defined in ROSE_COLLECTION_NAMES
+        const sortedProducts = data.sort((a, b) => {
+          const indexA = ROSE_COLLECTION_NAMES.indexOf(a.name.toLowerCase());
+          const indexB = ROSE_COLLECTION_NAMES.indexOf(b.name.toLowerCase());
+          return indexA - indexB;
+        });
 
-        if (error) {
-          console.error("Error fetching rose collection products:", error);
-          setLoading(false);
-          return;
-        }
-
-        if (data && data.length > 0) {
-          // Helper to normalize strings: lowercase, remove extra spaces, trim
-          const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, ' ').trim();
-          
-          const normalizedTargets = TARGET_PRODUCT_NAMES.map(normalize);
-
-          // Filter matching products
-          const matchedProducts = data.filter((item: any) => 
-            normalizedTargets.includes(normalize(item.name))
-          );
-
-          const formattedProducts: Product[] = matchedProducts.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            description: item.description || "",
-            price: item.price,
-            originalPrice: item.original_price,
-            image: item.image_url || "/images/placeholder.jpg",
-            discount: item.original_price && item.original_price > item.price 
-              ? Math.round(((item.original_price - item.price) / item.original_price) * 100)
-              : undefined,
-            badge: item.badge || (item.is_new ? "New" : null)
-          }));
-
-          // Sort by the order defined in TARGET_PRODUCT_NAMES
-          const sortedProducts = formattedProducts.sort((a, b) => {
-            const indexA = TARGET_PRODUCT_NAMES.indexOf(a.name.toLowerCase());
-            const indexB = TARGET_PRODUCT_NAMES.indexOf(b.name.toLowerCase());
-            return indexA - indexB;
-          });
-
-          setProducts(sortedProducts);
-        }
+        setProducts(sortedProducts);
       } catch (err) {
         console.error("Error:", err);
       } finally {
@@ -97,8 +36,9 @@ export function RoseCollection() {
     fetchProducts();
   }, []);
 
+
   return (
-    <section className="py-20 lg:py-28 bg-gradient-to-b from-cream to-white relative overflow-hidden">
+    <section className="py-12 lg:py-20 bg-gradient-to-b from-cream to-white relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-rose/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/5 rounded-full blur-3xl" />
@@ -151,11 +91,12 @@ export function RoseCollection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
                   {/* Discount Badge */}
-                  {product.discount && (
+                  {calculateDiscount(product.price, product.originalPrice) && (
                     <div className="absolute top-3 right-3 bg-rose text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                      -{product.discount}%
+                      -{calculateDiscount(product.price, product.originalPrice)}%
                     </div>
                   )}
+
                   
                   {/* Special Badge - if available */}
                   {product.badge && (

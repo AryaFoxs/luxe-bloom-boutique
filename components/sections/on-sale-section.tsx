@@ -6,55 +6,29 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, ShoppingBag, Sparkles, Loader2 } from "lucide-react";
 import { AddonsDialog } from "@/components/cart";
-import { createClient } from "@/lib/supabase/client";
-
-interface Bouquet {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number | null;
-  image: string;
-  discount?: number;
-}
-
-// List of product names to show in Signature Bouquets section
-const SIGNATURE_BOUQUET_NAMES = [
-  "Petal Blush",
-  "Mystic Purple",
-  "Imperial Pink",
-  "Midnight Blue",
-];
-
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(price);
-}
-
-function calculateDiscount(price: number, originalPrice: number | null | undefined): number | undefined {
-  if (!originalPrice || originalPrice <= price) return undefined;
-  return Math.round(((originalPrice - price) / originalPrice) * 100);
-}
+import { formatPrice, calculateDiscount } from "@/lib/format";
+import { SIGNATURE_BOUQUET_NAMES } from "@/lib/constants";
+import { getProductsByNames, type Product } from "@/lib/services/products";
 
 function SaleProductCard({
   bouquet,
   onAddToCart,
 }: {
-  bouquet: Bouquet;
-  onAddToCart: (bouquet: Bouquet) => void;
+  bouquet: Product;
+  onAddToCart: (bouquet: Product) => void;
 }) {
+  const discount = calculateDiscount(bouquet.price, bouquet.originalPrice);
+
   return (
     <Card className="group relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
       {/* Sale Badge */}
-      {bouquet.discount && (
+      {discount && (
         <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg flex items-center gap-1">
           <Sparkles className="w-3 h-3" />
-          SALE {bouquet.discount}%
+          SALE {discount}%
         </div>
       )}
+
 
       {/* Wishlist Button */}
       <button
@@ -114,56 +88,24 @@ function SaleProductCard({
 }
 
 export function OnSaleSection() {
-  const [addonsBouquet, setAddonsBouquet] = useState<Bouquet | null>(null);
-  const [bouquets, setBouquets] = useState<Bouquet[]>([]);
+  const [addonsBouquet, setAddonsBouquet] = useState<Product | null>(null);
+  const [bouquets, setBouquets] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch products from Supabase
+  // Fetch products using product service
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .in("name", SIGNATURE_BOUQUET_NAMES);
+        const data = await getProductsByNames(SIGNATURE_BOUQUET_NAMES);
+        
+        // Sort by the order defined in SIGNATURE_BOUQUET_NAMES
+        const sortedProducts = data.sort((a, b) => {
+          const indexA = SIGNATURE_BOUQUET_NAMES.indexOf(a.name);
+          const indexB = SIGNATURE_BOUQUET_NAMES.indexOf(b.name);
+          return indexA - indexB;
+        });
 
-        if (error) {
-          console.error("Error fetching products:", error);
-          setLoading(false);
-          return;
-        }
-
-        if (data && data.length > 0) {
-          // Convert Supabase products to Bouquet format
-          const supabaseProducts: Bouquet[] = data.map(
-            (product: {
-              id: string;
-              name: string;
-              description?: string;
-              price: number;
-              original_price?: number | null;
-              image_url?: string;
-            }) => ({
-              id: product.id,
-              name: product.name,
-              description: product.description || "",
-              price: product.price,
-              originalPrice: product.original_price || null,
-              image: product.image_url || "/images/placeholder.jpg",
-              discount: calculateDiscount(product.price, product.original_price),
-            })
-          );
-
-          // Sort by the order defined in SIGNATURE_BOUQUET_NAMES
-          const sortedProducts = supabaseProducts.sort((a, b) => {
-            const indexA = SIGNATURE_BOUQUET_NAMES.indexOf(a.name);
-            const indexB = SIGNATURE_BOUQUET_NAMES.indexOf(b.name);
-            return indexA - indexB;
-          });
-
-          setBouquets(sortedProducts);
-        }
+        setBouquets(sortedProducts);
       } catch (err) {
         console.error("Error:", err);
       } finally {
@@ -174,12 +116,13 @@ export function OnSaleSection() {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = (bouquet: Bouquet) => {
+  const handleAddToCart = (bouquet: Product) => {
     setAddonsBouquet(bouquet);
   };
 
+
   return (
-    <section id="on-sale" className="py-20 lg:py-28 bg-gradient-to-b from-cream to-white">
+    <section id="on-sale" className="py-12 lg:py-20 bg-gradient-to-b from-cream to-white">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -193,10 +136,10 @@ export function OnSaleSection() {
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
             Limited time offers on our most beloved arrangements. 
-            Fresh flowers at exceptional prices—grab yours before they&apos;re gone!
+            Fresh flowers at exceptional prices grab yours before they&apos;re gone!
           </p>
         </div>
-
+ 
         {/* Loading State */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
@@ -208,7 +151,7 @@ export function OnSaleSection() {
           </div>
         ) : (
           /* Product Grid */
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {bouquets.map((bouquet) => (
               <SaleProductCard
                 key={bouquet.id}

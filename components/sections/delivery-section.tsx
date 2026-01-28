@@ -38,7 +38,7 @@ const features = [
 
 export function DeliverySection() {
   return (
-    <section className="py-20 lg:py-28 bg-burgundy text-cream relative overflow-hidden">
+    <section className="py-12 lg:py-20 bg-burgundy text-cream relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-rose/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />

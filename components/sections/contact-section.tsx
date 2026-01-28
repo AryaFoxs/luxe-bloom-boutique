@@ -70,7 +70,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-20 lg:py-28 bg-white relative overflow-hidden">
+    <section id="contact" className="py-12 lg:py-20 bg-white relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-rose/5 rounded-full blur-3xl" />
       <div className="absolute top-0 right-0 w-72 h-72 bg-sage/5 rounded-full blur-3xl" />

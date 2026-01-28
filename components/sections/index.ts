@@ -11,3 +11,5 @@ export { BespokeServiceSection } from "./bespoke-service-section";
 export { UpgradesSection } from "./upgrades-section";
 export { BallerPackagesSection } from "./baller-packages-section";
 export { AboutSection } from "./about-section";
+export { ValentineBannerSection } from "./valentine-banner-section";
+export { ProductCollectionSection } from "./product-collection-section";

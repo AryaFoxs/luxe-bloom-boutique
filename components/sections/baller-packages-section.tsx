@@ -6,46 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, ShoppingBag, Crown, Loader2 } from "lucide-react";
 import { AddonsDialog } from "@/components/cart";
-import { createClient } from "@/lib/supabase/client";
-
-interface Package {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  includes: string[];
-}
-
-// List of product names to show in Grand Gestures section
-const GRAND_GESTURE_NAMES = [
-  "Luxe Candy Symphony",
-  "Royal Roses Basket",
-  "301 Holland Roses Mix",
-];
-
-// Default includes for grand gesture packages
-const defaultIncludes = [
-  "Premium Flowers",
-  "Luxury Wrapping",
-  "Message Card",
-  "Same-Day Delivery",
-];
-
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(price);
-}
+import { formatPrice } from "@/lib/format";
+import { GRAND_GESTURE_NAMES, DEFAULT_PACKAGE_INCLUDES } from "@/lib/constants";
+import { getProductsByNames, type Product } from "@/lib/services/products";
 
 function PackageCard({
   pkg,
   onAddToCart,
 }: {
-  pkg: Package;
-  onAddToCart: (pkg: Package) => void;
+  pkg: Product;
+  onAddToCart: (pkg: Product) => void;
 }) {
   return (
     <Card className="group relative overflow-hidden border-0 bg-gradient-to-br from-burgundy to-burgundy/90 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2">
@@ -54,6 +24,7 @@ function PackageCard({
         <Crown className="w-3 h-3" />
         Grand Gesture
       </div>
+
 
       {/* Wishlist Button */}
       <button
@@ -95,7 +66,7 @@ function PackageCard({
         <div className="mb-6">
           <h4 className="text-xs font-semibold text-gold uppercase tracking-wider mb-2">Includes:</h4>
           <ul className="space-y-1">
-            {pkg.includes.map((item, index) => (
+            {DEFAULT_PACKAGE_INCLUDES.map((item, index) => (
               <li key={index} className="flex items-center gap-2 text-cream/80 text-sm">
                 <span className="w-1.5 h-1.5 bg-gold rounded-full flex-shrink-0" />
                 {item}
@@ -119,54 +90,24 @@ function PackageCard({
 }
 
 export function BallerPackagesSection() {
-  const [addonsPkg, setAddonsPkg] = useState<Package | null>(null);
-  const [packages, setPackages] = useState<Package[]>([]);
+  const [addonsPkg, setAddonsPkg] = useState<Product | null>(null);
+  const [packages, setPackages] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Fetch products from Supabase
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .in("name", GRAND_GESTURE_NAMES);
+        const data = await getProductsByNames(GRAND_GESTURE_NAMES);
+        
+        // Sort by the order defined in GRAND_GESTURE_NAMES
+        const sortedProducts = data.sort((a, b) => {
+          const indexA = GRAND_GESTURE_NAMES.indexOf(a.name);
+          const indexB = GRAND_GESTURE_NAMES.indexOf(b.name);
+          return indexA - indexB;
+        });
 
-        if (error) {
-          console.error("Error fetching products:", error);
-          setLoading(false);
-          return;
-        }
-
-        if (data && data.length > 0) {
-          // Convert Supabase products to Package format
-          const supabaseProducts: Package[] = data.map(
-            (product: {
-              id: string;
-              name: string;
-              description?: string;
-              price: number;
-              image_url?: string;
-            }) => ({
-              id: product.id,
-              name: product.name,
-              description: product.description || "",
-              price: product.price,
-              image: product.image_url || "/images/placeholder.jpg",
-              includes: defaultIncludes,
-            })
-          );
-
-          // Sort by the order defined in GRAND_GESTURE_NAMES
-          const sortedProducts = supabaseProducts.sort((a, b) => {
-            const indexA = GRAND_GESTURE_NAMES.indexOf(a.name);
-            const indexB = GRAND_GESTURE_NAMES.indexOf(b.name);
-            return indexA - indexB;
-          });
-
-          setPackages(sortedProducts);
-        }
+        setPackages(sortedProducts);
       } catch (err) {
         console.error("Error:", err);
       } finally {
@@ -177,12 +118,13 @@ export function BallerPackagesSection() {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = (pkg: Package) => {
+  const handleAddToCart = (pkg: Product) => {
     setAddonsPkg(pkg);
   };
 
+
   return (
-    <section id="baller-packages" className="py-20 lg:py-28 bg-gradient-to-b from-cream to-white">
+    <section id="baller-packages" className="py-12 lg:py-20 bg-gradient-to-b from-cream to-white">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
