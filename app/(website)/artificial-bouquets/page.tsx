@@ -54,47 +54,46 @@ export default function ArtificialBouquetsPage() {
   const [selectedBouquet, setSelectedBouquet] = useState<Bouquet | null>(null);
   const [addonsBouquet, setAddonsBouquet] = useState<Bouquet | null>(null);
 
-  // Use dummy data for artificial bouquets (Synchronized with Admin)
+  // Fetch products from Supabase
   useEffect(() => {
-    const artificialNames = [
-      "Zenith Silk Arrangement", // 0
-      "Deep Red Satin Romance", // 1
-      "Blush Pink Dream", // 2
-      "Sunny Sunflower Forever", // 3
-      "Pure White Lily Elegance", // 4
-      "Pastel Meadow Mix", // 5
-      "Golden Hour Marigold", // 6
-      "Midnight Blue Satin Rose", // 7
-      "Autumn Harvest Glow", // 8
-      "Classic White Tulip Cases", // 9
-      "Tropical Paradise Fern", // 10
-      "Mini Rosebud Token Box", // 11
-      "Enchanted White Gardenia", // 12
-      "Royal Navy Hydrangea", // 13
-      "Sakura Spring Silk branches", // 14
-      "Majestic Calla Lily", // 15
-      "Blue Galaxy Heart Satin", // 16
-      "Turquoise Butterfly Bloom", // 17
-      "Congratulations Blue Mix", // 18
-      "Silver Moonlight Satin", // 19
-      "Luxe Flora Grandeur Display" // 20
-    ];
+    async function fetchProducts() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("category", "Artificial")
+          .eq("is_hidden", false)
+          .order("id", { ascending: true });
 
-    const dummyArtificials: Bouquet[] = Array.from({ length: 21 }, (_, i) => ({
-      id: `art-dummy-${i}`,
-      name: artificialNames[i] || `Artificial Bouquet #${i}`,
-      description: i === 0 
-        ? "A breathtaking masterpiece of artificial floral art, featuring a harmonious blend of premium silk blossoms in a modern, serene design."
-        : "Discover the beauty of our premium collection of life-alike artificial flowers. Beautiful, everlasting, and designed to brighten any space forever.",
-      price: i === 0 ? 890000 : 300000 + (i * 10000),
-      originalPrice: i === 0 ? 1100000 : null,
-      image: `/images/artificial/artificial-${i}.jpg`,
-      category: "Artificial",
-      isPromo: i === 0 || i === 6 || i === 18,
-    }));
+        if (error) {
+          console.error("Error fetching products:", error);
+          setLoading(false);
+          return;
+        }
 
-    setAllBouquets(dummyArtificials);
-    setLoading(false);
+        if (data) {
+          const supabaseProducts: Bouquet[] = data.map((product) => ({
+            id: product.id,
+            name: product.name,
+            description: product.description || "",
+            price: product.price,
+            originalPrice: product.original_price || null,
+            image: product.image_url || "/images/placeholder.jpg",
+            category: product.category,
+            isPromo: product.is_promo || false,
+          }));
+
+          setAllBouquets(supabaseProducts);
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
   }, []);
 
   const filteredBouquets = allBouquets.filter((bouquet) => {

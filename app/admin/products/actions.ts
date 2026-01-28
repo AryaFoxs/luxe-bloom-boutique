@@ -102,6 +102,10 @@ export async function getProducts() {
 export async function deleteProduct(id: string) {
   const supabase = await createClient();
   
+  if (id.startsWith("art-dummy-")) {
+    return { error: "This is dummy data and cannot be deleted from the database. Please add actual products using 'Add Product'." };
+  }
+
   const { error } = await supabase
     .from("products")
     .delete()
@@ -132,6 +136,10 @@ export async function updateProduct(formData: FormData) {
     // Validate required fields
     if (!id || !name || !description || !price || !category) {
       return { error: "Please fill in all required fields." };
+    }
+
+    if (id.startsWith("art-dummy-")) {
+      return { error: "This is dummy data for preview and cannot be edited in the database. To manage this product, please add it as a new product using 'Add Product'." };
     }
     
     let updateData: Record<string, unknown> = {
@@ -188,6 +196,10 @@ export async function toggleProductVisibility(id: string, isHidden: boolean) {
   try {
     const supabase = await createClient();
     
+    if (id.startsWith("art-dummy-")) {
+      return { error: "Dummy data visibility cannot be toggled." };
+    }
+
     const { data, error } = await supabase
       .from("products")
       .update({ is_hidden: isHidden })

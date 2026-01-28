@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AddProductDialog } from "./add-product-dialog";
@@ -34,44 +35,7 @@ export default function ProductsPage() {
   const fetchProducts = async () => {
     setLoading(true);
     const result = await getProducts();
-    
-    const artificialNames = [
-      "Zenith Silk Arrangement",
-      "Deep Red Satin Romance",
-      "Blush Pink Dream",
-      "Sunny Sunflower Forever",
-      "Pure White Lily Elegance",
-      "Pastel Meadow Mix",
-      "Golden Hour Marigold",
-      "Midnight Blue Satin Rose",
-      "Autumn Harvest Glow",
-      "Classic White Tulip Cases",
-      "Tropical Paradise Fern",
-      "Mini Rosebud Token Box",
-      "Enchanted White Gardenia",
-      "Royal Navy Hydrangea",
-      "Sakura Spring Silk branches",
-      "Majestic Calla Lily",
-      "Blue Galaxy Heart Satin",
-      "Turquoise Butterfly Bloom",
-      "Congratulations Blue Mix",
-      "Silver Moonlight Satin",
-      "Luxe Flora Grandeur Display"
-    ];
-
-    // Dummy artificial products to display in admin
-    const dummyArtificials: Product[] = Array.from({ length: 21 }, (_, i) => ({
-      id: `art-dummy-${i}`,
-      name: artificialNames[i] || `Artificial Bouquet #${i}`,
-      description: "Dummy data for preview. This item is not yet in the database.",
-      price: i === 0 ? 890000 : 300000 + (i * 10000),
-      category: "Artificial",
-      image_url: `/images/artificial/artificial-${i}.jpg`,
-      is_promo: i === 0 || i === 6 || i === 18,
-      is_hidden: false
-    }));
-
-    setProducts([...(result.data || []), ...dummyArtificials]);
+    setProducts(result.data || []);
     setLoading(false);
   };
 
@@ -200,45 +164,62 @@ export default function ProductsPage() {
               </div>
               <div className="p-4">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-semibold text-foreground">{product.name}</h3>
-                  <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">
-                    {product.category}
-                  </span>
-                </div>
-                <p className="text-rose font-semibold">{formatPrice(product.price)}</p>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                  {product.is_promo ? (
-                    <span className="px-2 py-0.5 bg-rose/10 text-rose text-xs font-medium rounded-full">
-                      On Sale
-                    </span>
-                  ) : (
-                    <span className="text-sm text-muted-foreground">Regular</span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-lg">{product.name}</span>
+                  </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
                         <MoreHorizontal className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem 
-                        onClick={() => handleToggleVisibility(product.id!, product.is_hidden || false)}
+                    <DropdownMenuContent align="end" className="w-40 rounded-xl">
+                      <DropdownMenuItem
+                        onClick={() => setEditingProduct(product)}
+                        className="cursor-pointer"
+                      >
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => handleToggleVisibility(product.id!, !product.is_hidden)}
                         className="cursor-pointer"
                       >
                         {product.is_hidden ? (
                           <>
                             <Eye className="w-4 h-4 mr-2" />
-                            Show Product
+                            Show
                           </>
                         ) : (
                           <>
                             <EyeOff className="w-4 h-4 mr-2" />
-                            Hide Product
+                            Hide
                           </>
                         )}
                       </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => handleDelete(product.id!)}
+                        className="text-red-600 focus:text-red-600 cursor-pointer"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                </div>
+                <p className="text-rose font-semibold">{formatPrice(product.price)}</p>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-xs px-2 py-0.5 bg-gray-100 text-muted-foreground rounded-full">
+                      {product.category}
+                    </span>
+                    {product.is_promo && (
+                      <span className="text-xs px-2 py-0.5 bg-rose/10 text-rose font-medium rounded-full">
+                        PROMO
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
