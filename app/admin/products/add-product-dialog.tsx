@@ -16,7 +16,7 @@ import { addProduct } from "./actions";
 import Image from "next/image";
 import { ImageCropDialog } from "@/components/ui/image-crop-dialog";
 
-const categories = ["Bouquets", "Premium", "Box", "Arrangement", "Wedding"];
+const categories = ["Bouquets", "Artificial", "Premium", "Box", "Arrangement", "Wedding"];
 
 export function AddProductDialog({ onSuccess }: { onSuccess?: () => void }) {
   const [open, setOpen] = useState(false);

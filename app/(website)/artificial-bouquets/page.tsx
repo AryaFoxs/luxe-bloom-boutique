@@ -54,185 +54,44 @@ export default function ArtificialBouquetsPage() {
   const [selectedBouquet, setSelectedBouquet] = useState<Bouquet | null>(null);
   const [addonsBouquet, setAddonsBouquet] = useState<Bouquet | null>(null);
 
-  // Use dummy data for artificial bouquets
+  // Use dummy data for artificial bouquets (Synchronized with Admin)
   useEffect(() => {
-    const dummyArtificials: Bouquet[] = [
-      {
-        id: "art-0",
-        name: "Zenith Silk Arrangement",
-        description: "A breathtaking masterpiece of artificial floral art, featuring a harmonious blend of premium silk blossoms in a modern, serene design.",
-        price: 890000,
-        originalPrice: 1100000,
-        image: "/images/artificial/artificial-0.jpg",
-        category: "Premium",
-        isPromo: true,
-      },
-      {
-        id: "art-1",
-        name: "Everlasting Crimson Rose",
-        description: "A stunning arrangement of premium deep red silk roses that will never fade. Perfect for long-lasting romance.",
-        price: 450000,
-        originalPrice: 550000,
-        image: "/images/artificial/artificial-1.jpg",
-        category: "Artificial",
-        isPromo: true,
-      },
-      {
-        id: "art-2",
-        name: "Silk Lavender Dream",
-        description: "Ethereal lavender and white silk flowers combined with delicate greenery for a soothing atmosphere.",
-        price: 385000,
-        image: "/images/artificial/artificial-2.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-3",
-        name: "Premium Peony Bloom",
-        description: "Lush, realistic peonies in soft blush tones. A classic addition to any elegant home decor.",
-        price: 620000,
-        image: "/images/artificial/artificial-3.jpg",
-        category: "Premium",
-      },
-      {
-        id: "art-4",
-        name: "Golden Sunflower Forever",
-        description: "Bright and cheerful artificial sunflowers that bring sunshine into your home all year round.",
-        price: 320000,
-        image: "/images/artificial/artificial-4.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-5",
-        name: "White Lily Elegance",
-        description: "Stately white silk lilies paired with eucalyptus branches for a sophisticated, timeless look.",
-        price: 495000,
-        image: "/images/artificial/artificial-5.jpg",
-        category: "Premium",
-      },
-      {
-        id: "art-6",
-        name: "Pastel Meadow Mix",
-        description: "A whimsical mix of various artificial wildflowers in soft pastel colors. Perfect for a rustic touch.",
-        price: 415000,
-        originalPrice: 480000,
-        image: "/images/artificial/artificial-6.jpg",
-        category: "Artificial",
-        isPromo: true,
-      },
-      {
-        id: "art-7",
-        name: "Velvet Orchid Display",
-        description: "Exquisite artificial orchids with velvet-textured petals. A symbol of luxury and refinement.",
-        price: 750000,
-        image: "/images/artificial/artificial-7.jpg",
-        category: "Premium",
-      },
-      {
-        id: "art-8",
-        name: "Midnight Blue Rose",
-        description: "Unique and mysterious blue silk roses, handcrafted for a truly distinctive floral gift.",
-        price: 430000,
-        image: "/images/artificial/artificial-8.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-9",
-        name: "Autumn Harvest Silk",
-        description: "Warm-toned artificial flowers evoking the beauty of fall, featuring deep oranges and rich browns.",
-        price: 395000,
-        image: "/images/artificial/artificial-9.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-10",
-        name: "Classic White Tulip Case",
-        description: "Graceful white silk tulips that look and feel real. An understated yet beautiful arrangement.",
-        price: 350000,
-        image: "/images/artificial/artificial-10.jpg",
-        category: "Silk Flowers",
-      },
-      {
-        id: "art-11",
-        name: "Tropical Paradise Fern",
-        description: "Vibrant tropical artificial flowers mixed with lush silk ferns, bringing Bali vibes indoors.",
-        price: 580000,
-        image: "/images/artificial/artificial-11.jpg",
-        category: "Premium",
-      },
-      {
-        id: "art-12",
-        name: "Mini Rosebud Box",
-        description: "Adorable box filled with tiny silk rosebuds. Perfect for small spaces or as a thoughtful token.",
-        price: 275000,
-        image: "/images/artificial/artificial-12.jpg",
-        category: "Silk Flowers",
-      },
-      {
-        id: "art-13",
-        name: "Enchanted Gardenia",
-        description: "Pure white artificial gardenias that radiate elegance and grace. A masterpiece of silk craftsmanship.",
-        price: 525000,
-        image: "/images/artificial/artificial-13.jpg",
-        category: "Premium",
-      },
-      {
-        id: "art-14",
-        name: "Royal Hydrangea Blue",
-        description: "Voluminous blue hydrangeas that bring a regal touch to any room. High-quality lifelike texture.",
-        price: 480000,
-        image: "/images/artificial/artificial-14.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-15",
-        name: "Sakura Spring Silk",
-        description: "Delicate cherry blossom branches in silk, capturing the transient beauty of spring forever.",
-        price: 390000,
-        image: "/images/artificial/artificial-15.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-16",
-        name: "Majestic Calla Lily",
-        description: "Sleek and modern artificial calla lilies in a striking arrangement. Perfect for contemporary interiors.",
-        price: 550000,
-        image: "/images/artificial/artificial-16.jpg",
-        category: "Premium",
-      },
-      {
-        id: "art-17",
-        name: "Bohemian Wildflower",
-        description: "A free-spirited mix of dried-look artificial flowers for that perfect boho-chic aesthetic.",
-        price: 425000,
-        image: "/images/artificial/artificial-17.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-18",
-        name: "Sweetheart Carnation",
-        description: "Soft pink silk carnations bundled with baby's breath. A gentle and loving floral gift.",
-        price: 310000,
-        image: "/images/artificial/artificial-18.jpg",
-        category: "Silk Flowers",
-        isPromo: true,
-      },
-      {
-        id: "art-19",
-        name: "Imperial Chrysanthemum",
-        description: "Grand artificial chrysanthemums in deep purple tones, symbolizing longevity and joy.",
-        price: 465000,
-        image: "/images/artificial/artificial-19.jpg",
-        category: "Artificial",
-      },
-      {
-        id: "art-20",
-        name: "Luxe Flora Grandeur",
-        description: "Our most grand artificial arrangement, featuring a mix of our finest silk flowers in a stately display.",
-        price: 1250000,
-        image: "/images/artificial/artificial-20.jpg",
-        category: "Premium",
-      }
+    const artificialNames = [
+      "Zenith Silk Arrangement", // 0
+      "Deep Red Satin Romance", // 1
+      "Blush Pink Dream", // 2
+      "Sunny Sunflower Forever", // 3
+      "Pure White Lily Elegance", // 4
+      "Pastel Meadow Mix", // 5
+      "Golden Hour Marigold", // 6
+      "Midnight Blue Satin Rose", // 7
+      "Autumn Harvest Glow", // 8
+      "Classic White Tulip Cases", // 9
+      "Tropical Paradise Fern", // 10
+      "Mini Rosebud Token Box", // 11
+      "Enchanted White Gardenia", // 12
+      "Royal Navy Hydrangea", // 13
+      "Sakura Spring Silk branches", // 14
+      "Majestic Calla Lily", // 15
+      "Blue Galaxy Heart Satin", // 16
+      "Turquoise Butterfly Bloom", // 17
+      "Congratulations Blue Mix", // 18
+      "Silver Moonlight Satin", // 19
+      "Luxe Flora Grandeur Display" // 20
     ];
+
+    const dummyArtificials: Bouquet[] = Array.from({ length: 21 }, (_, i) => ({
+      id: `art-dummy-${i}`,
+      name: artificialNames[i] || `Artificial Bouquet #${i}`,
+      description: i === 0 
+        ? "A breathtaking masterpiece of artificial floral art, featuring a harmonious blend of premium silk blossoms in a modern, serene design."
+        : "Discover the beauty of our premium collection of life-alike artificial flowers. Beautiful, everlasting, and designed to brighten any space forever.",
+      price: i === 0 ? 890000 : 300000 + (i * 10000),
+      originalPrice: i === 0 ? 1100000 : null,
+      image: `/images/artificial/artificial-${i}.jpg`,
+      category: "Artificial",
+      isPromo: i === 0 || i === 6 || i === 18,
+    }));
 
     setAllBouquets(dummyArtificials);
     setLoading(false);

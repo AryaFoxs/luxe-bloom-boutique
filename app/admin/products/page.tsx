@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Search, Filter, MoreHorizontal, Edit, Trash2, Loader2, Eye, EyeOff, Package } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,12 +28,50 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const fetchProducts = async () => {
     setLoading(true);
     const result = await getProducts();
-    setProducts(result.data || []);
+    
+    const artificialNames = [
+      "Zenith Silk Arrangement",
+      "Deep Red Satin Romance",
+      "Blush Pink Dream",
+      "Sunny Sunflower Forever",
+      "Pure White Lily Elegance",
+      "Pastel Meadow Mix",
+      "Golden Hour Marigold",
+      "Midnight Blue Satin Rose",
+      "Autumn Harvest Glow",
+      "Classic White Tulip Cases",
+      "Tropical Paradise Fern",
+      "Mini Rosebud Token Box",
+      "Enchanted White Gardenia",
+      "Royal Navy Hydrangea",
+      "Sakura Spring Silk branches",
+      "Majestic Calla Lily",
+      "Blue Galaxy Heart Satin",
+      "Turquoise Butterfly Bloom",
+      "Congratulations Blue Mix",
+      "Silver Moonlight Satin",
+      "Luxe Flora Grandeur Display"
+    ];
+
+    // Dummy artificial products to display in admin
+    const dummyArtificials: Product[] = Array.from({ length: 21 }, (_, i) => ({
+      id: `art-dummy-${i}`,
+      name: artificialNames[i] || `Artificial Bouquet #${i}`,
+      description: "Dummy data for preview. This item is not yet in the database.",
+      price: i === 0 ? 890000 : 300000 + (i * 10000),
+      category: "Artificial",
+      image_url: `/images/artificial/artificial-${i}.jpg`,
+      is_promo: i === 0 || i === 6 || i === 18,
+      is_hidden: false
+    }));
+
+    setProducts([...(result.data || []), ...dummyArtificials]);
     setLoading(false);
   };
 
@@ -51,9 +90,11 @@ export default function ProductsPage() {
     fetchProducts();
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="space-y-6">
@@ -70,21 +111,43 @@ export default function ProductsPage() {
         <AddProductDialog onSuccess={fetchProducts} />
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <Input
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 rounded-xl"
-          />
+      {/* Filters & Tabs */}
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center gap-2 border-b border-gray-100">
+          {["All", "Bouquets", "Artificial"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setSelectedCategory(tab)}
+              className={cn(
+                "px-4 py-2 text-sm font-medium transition-colors relative",
+                selectedCategory === tab
+                  ? "text-rose"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              {tab}
+              {selectedCategory === tab && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose" />
+              )}
+            </button>
+          ))}
         </div>
-        <Button variant="outline" className="rounded-xl">
-          <Filter className="w-4 h-4 mr-2" />
-          Filter
-        </Button>
+
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Input
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 rounded-xl"
+            />
+          </div>
+          <Button variant="outline" className="rounded-xl">
+            <Filter className="w-4 h-4 mr-2" />
+            More Filters
+          </Button>
+        </div>
       </div>
 
       {/* Loading State */}
