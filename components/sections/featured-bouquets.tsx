@@ -66,7 +66,7 @@ function BouquetCard({
           alt={bouquet.name}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-burgundy/0 group-hover:bg-burgundy/20 transition-colors duration-300" />
@@ -267,7 +267,7 @@ export function FeaturedBouquets() {
           .select("*")
           .eq("is_hidden", false)
           .order("created_at", { ascending: false })
-          .limit(6);
+          .limit(12);
 
         if (error) {
           console.error("Error fetching products:", error);
@@ -351,7 +351,7 @@ export function FeaturedBouquets() {
           </div>
         ) : (
           /* Bouquet Grid */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {bouquets.map((bouquet) => (
               <BouquetCard 
                 key={bouquet.id} 
