@@ -4,6 +4,7 @@ import { MapPin, Mail, Phone, Instagram, MessageCircle } from "lucide-react";
 
 const shopLinks = [
   { href: "/bouquets", label: "All Bouquets" },
+  { href: "/artificial-bouquets", label: "Artificial Bouquets" },
   { href: "/bouquets?category=roses", label: "Roses Collection" },
   { href: "/bouquets?category=mixed", label: "Mixed Bouquets" },
   { href: "/bouquets?category=premium", label: "Premium Collection" },
