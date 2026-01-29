@@ -51,6 +51,16 @@ export function HeroSection() {
               Where every stem tells a story and every bouquet is a work of heart. 
               We thoughtfully craft unique bouquets inspired by nature&apos;s splendor.
             </p>
+            
+            <div 
+              className="mt-4 animate-fadeIn inline-flex items-center gap-2 px-6 py-2 bg-white rounded-full shadow-2xl"
+              style={{ animationDelay: '0.5s' }}
+            >
+              <span className="w-2 h-2 rounded-full bg-rose animate-pulse" />
+              <p className="text-xs md:text-sm font-bold text-burgundy uppercase tracking-[0.2em]">
+                Only accept online orders
+              </p>
+            </div>
           </div>
 
           {/* Trust badges - Restored original style */}
