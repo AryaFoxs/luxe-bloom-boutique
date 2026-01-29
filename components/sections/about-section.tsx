@@ -88,7 +88,7 @@ export function AboutSection() {
                 </div>
                 <div className="relative aspect-square rounded-2xl overflow-hidden shadow-xl">
                   <Image
-                    src="/images/bouquets/IMG20251224202736.jpg"
+                    src="/images/bouquets/IMG_53431.jpg"
                     alt="Premium Flowers"
                     fill
                     className="object-cover"
@@ -108,7 +108,7 @@ export function AboutSection() {
                 </div>
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
                   <Image
-                    src="/images/bouquets/IMG-20251231-WA0014.jpg"
+                    src="/images/bouquets/IMG_52101.jpg"
                     alt="Fresh Bouquet"
                     fill
                     className="object-cover"

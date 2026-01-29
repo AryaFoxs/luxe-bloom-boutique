@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,16 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ShoppingBag, Plus, Minus, Check, Gift } from "lucide-react";
+import { ShoppingBag, Plus, Minus, Check, Gift, Loader2 } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
-
-interface Addon {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-}
+import { getActiveAddons, type Addon } from "@/lib/services/products";
 
 interface BouquetItem {
   id: string;
@@ -26,51 +19,6 @@ interface BouquetItem {
   price: number;
   image: string;
 }
-
-const addons: Addon[] = [
-  {
-    id: "chocolate-ferrero",
-    name: "Ferrero Rocher Box",
-    price: 150000,
-    image: "/images/addons/chocolate.jpg",
-    description: "16 pcs premium chocolate",
-  },
-  {
-    id: "teddy-bear",
-    name: "Teddy Bear",
-    price: 200000,
-    image: "/images/addons/teddy.jpg",
-    description: "Soft plush teddy bear 30cm",
-  },
-  {
-    id: "greeting-card",
-    name: "Premium Card",
-    price: 50000,
-    image: "/images/addons/card.jpg",
-    description: "Handwritten message card",
-  },
-  {
-    id: "balloon",
-    name: "Helium Balloon",
-    price: 75000,
-    image: "/images/addons/balloon.jpg",
-    description: "Heart-shaped foil balloon",
-  },
-  {
-    id: "chocolate-box",
-    name: "Chocolate Truffle",
-    price: 120000,
-    image: "/images/addons/truffle.jpg",
-    description: "Artisan chocolate truffles",
-  },
-  {
-    id: "candle",
-    name: "Scented Candle",
-    price: 180000,
-    image: "/images/addons/candle.jpg",
-    description: "Luxury rose-scented candle",
-  },
-];
 
 function formatPrice(price: number): string {
   return new Intl.NumberFormat("id-ID", {
@@ -88,7 +36,26 @@ interface AddonsDialogProps {
 
 export function AddonsDialog({ bouquet, isOpen, onClose }: AddonsDialogProps) {
   const [selectedAddons, setSelectedAddons] = useState<Record<string, number>>({});
+  const [addons, setAddons] = useState<Addon[]>([]);
+  const [loading, setLoading] = useState(true);
   const { addItem, addBundleItem } = useCart();
+
+  useEffect(() => {
+    async function fetchAddons() {
+      if (!isOpen) return;
+      
+      setLoading(true);
+      try {
+        const data = await getActiveAddons();
+        setAddons(data);
+      } catch (err) {
+        console.error("Error fetching addons:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchAddons();
+  }, [isOpen]);
 
   if (!bouquet) return null;
 
@@ -171,74 +138,90 @@ export function AddonsDialog({ bouquet, isOpen, onClose }: AddonsDialogProps) {
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto py-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {addons.map((addon) => {
-              const isSelected = !!selectedAddons[addon.id];
-              const quantity = selectedAddons[addon.id] || 0;
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-2">
+              <Loader2 className="w-8 h-8 animate-spin text-rose" />
+              <p className="text-sm text-muted-foreground">Loading extras...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {addons.map((addon) => {
+                const isSelected = !!selectedAddons[addon.id];
+                const quantity = selectedAddons[addon.id] || 0;
 
-              return (
-                <div
-                  key={addon.id}
-                  className={`relative rounded-xl border-2 overflow-hidden transition-all cursor-pointer ${
-                    isSelected
-                      ? "border-rose bg-rose/5"
-                      : "border-gray-100 hover:border-rose/30"
-                  }`}
-                  onClick={() => !isSelected && toggleAddon(addon.id)}
-                >
-                  {/* Check mark */}
-                  {isSelected && (
-                    <div className="absolute top-2 right-2 z-10 w-6 h-6 bg-rose text-white rounded-full flex items-center justify-center">
-                      <Check className="w-4 h-4" />
-                    </div>
-                  )}
-
-                  {/* Image placeholder */}
-                  <div className="aspect-square bg-gradient-to-br from-rose/10 to-gold/10 flex items-center justify-center">
-                    <Gift className="w-10 h-10 text-rose/40" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-3">
-                    <h4 className="font-medium text-sm text-foreground truncate">
-                      {addon.name}
-                    </h4>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {addon.description}
-                    </p>
-                    <p className="text-rose font-semibold text-sm mt-1">
-                      +{formatPrice(addon.price)}
-                    </p>
-
-                    {/* Quantity controls */}
+                return (
+                  <div
+                    key={addon.id}
+                    className={`relative rounded-xl border-2 overflow-hidden transition-all cursor-pointer ${
+                      isSelected
+                        ? "border-rose bg-rose/5"
+                        : "border-gray-100 hover:border-rose/30"
+                    }`}
+                    onClick={() => !isSelected && toggleAddon(addon.id)}
+                  >
+                    {/* Check mark */}
                     {isSelected && (
-                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateAddonQuantity(addon.id, -1);
-                          }}
-                          className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="font-medium text-sm">{quantity}</span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateAddonQuantity(addon.id, 1);
-                          }}
-                          className="w-7 h-7 rounded-full bg-rose/10 hover:bg-rose/20 text-rose flex items-center justify-center transition-colors"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
+                      <div className="absolute top-2 right-2 z-10 w-6 h-6 bg-rose text-white rounded-full flex items-center justify-center">
+                        <Check className="w-4 h-4" />
                       </div>
                     )}
+
+                    {/* Image */}
+                    <div className="relative aspect-square bg-gray-50 flex items-center justify-center">
+                      {addon.image ? (
+                        <Image 
+                          src={addon.image} 
+                          alt={addon.name} 
+                          fill 
+                          className="object-cover"
+                        />
+                      ) : (
+                        <Gift className="w-10 h-10 text-rose/40" />
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-3">
+                      <h4 className="font-medium text-sm text-foreground truncate">
+                        {addon.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {addon.description}
+                      </p>
+                      <p className="text-rose font-semibold text-sm mt-1">
+                        +{formatPrice(addon.price)}
+                      </p>
+
+                      {/* Quantity controls */}
+                      {isSelected && (
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateAddonQuantity(addon.id, -1);
+                            }}
+                            className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="font-medium text-sm">{quantity}</span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateAddonQuantity(addon.id, 1);
+                            }}
+                            className="w-7 h-7 rounded-full bg-rose/10 hover:bg-rose/20 text-rose flex items-center justify-center transition-colors"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Footer */}
@@ -257,10 +240,12 @@ export function AddonsDialog({ bouquet, isOpen, onClose }: AddonsDialogProps) {
                 <span>{formatPrice(addon.price * (selectedAddons[addon.id] || 0))}</span>
               </div>
             ))}
-            <div className="flex justify-between font-semibold text-base pt-2 border-t">
-              <span>Total</span>
-              <span className="text-rose">{formatPrice(grandTotal)}</span>
-            </div>
+            {!loading && (
+              <div className="flex justify-between font-semibold text-base pt-2 border-t">
+                <span>Total</span>
+                <span className="text-rose">{formatPrice(grandTotal)}</span>
+              </div>
+            )}
           </div>
 
           {/* Buttons */}

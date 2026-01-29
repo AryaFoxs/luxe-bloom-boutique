@@ -88,3 +88,37 @@ export async function getProductsByCategory(category?: string, limit: number = 8
     badge: p.badge || (p.is_new ? "New" : null)
   }));
 }
+
+export interface Addon {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  isActive: boolean;
+}
+
+/**
+ * Fetch all active addons
+ */
+export async function getActiveAddons(): Promise<Addon[]> {
+  const { data, error } = await supabase
+    .from("addons")
+    .select("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching active addons:", error);
+    return [];
+  }
+
+  return (data || []).map((a) => ({
+    id: a.id,
+    name: a.name,
+    description: a.description || "",
+    price: a.price,
+    image: a.image_url || "/images/placeholder.jpg",
+    isActive: a.is_active,
+  }));
+}

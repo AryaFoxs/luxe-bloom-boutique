@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, ShoppingBag } from "lucide-react";
+import { AddonsDialog } from "@/components/cart";
 import { formatPrice, calculateDiscount } from "@/lib/format";
 import { ROSE_COLLECTION_NAMES } from "@/lib/constants";
 import { getProductsByNames, type Product } from "@/lib/services/products";
@@ -12,6 +13,7 @@ import { getProductsByNames, type Product } from "@/lib/services/products";
 export function RoseCollection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addonsBouquet, setAddonsBouquet] = useState<Product | null>(null);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -97,26 +99,12 @@ export function RoseCollection() {
                     </div>
                   )}
 
-                  
                   {/* Special Badge - if available */}
                   {product.badge && (
                     <div className="absolute top-3 left-3 bg-gold text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
                       {product.badge}
                     </div>
                   )}
-                  
-                  {/* Quick View Button - appears on hover */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-white text-rose hover:bg-rose hover:text-white rounded-full px-6 shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-500"
-                    >
-                      <Link href="/shop/roses">
-                        Quick View
-                      </Link>
-                    </Button>
-                  </div>
                 </div>
                 
                 {/* Content */}
@@ -140,20 +128,26 @@ export function RoseCollection() {
                     </span>
                   </div>
                   
-                  {/* Order Button */}
+                  {/* Add to Cart Button */}
                   <Button
-                    asChild
-                    className="w-full rounded-full bg-rose/10 text-rose hover:bg-rose hover:text-white border-2 border-rose/20 hover:border-rose font-semibold transition-all duration-300"
+                    className="w-full rounded-full bg-rose hover:bg-rose-dark text-white font-semibold transition-all duration-300"
+                    onClick={() => setAddonsBouquet(product)}
                   >
-                    <Link href="/shop/roses">
-                      ORDER NOW
-                    </Link>
+                    <ShoppingBag className="w-4 h-4 mr-2" />
+                    Add to Cart
                   </Button>
                 </div>
               </div>
             ))}
           </div>
         )}
+
+        {/* Add-ons Dialog */}
+        <AddonsDialog
+          bouquet={addonsBouquet}
+          isOpen={!!addonsBouquet}
+          onClose={() => setAddonsBouquet(null)}
+        />
 
         {/* Bottom CTA */}
         <div className="text-center mt-12">
