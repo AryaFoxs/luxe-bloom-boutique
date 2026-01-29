@@ -15,16 +15,7 @@ import {
 import { Plus, Loader2, Trash2, Search, Minus, X, Gift, User, Phone, Mail, MapPin, FileText, ChevronRight, ChevronLeft } from "lucide-react";
 import { createOrder, type OrderItem } from "./actions";
 import { getProducts, type Product } from "../products/actions";
-
-// Add-ons data (same as website)
-const availableAddons = [
-  { id: "chocolate-ferrero", name: "Ferrero Rocher Box", price: 150000 },
-  { id: "teddy-bear", name: "Teddy Bear", price: 200000 },
-  { id: "greeting-card", name: "Premium Card", price: 50000 },
-  { id: "balloon", name: "Helium Balloon", price: 75000 },
-  { id: "chocolate-box", name: "Chocolate Truffle", price: 120000 },
-  { id: "candle", name: "Scented Candle", price: 180000 },
-];
+import { getActiveAddons, type Addon } from "@/lib/services/products";
 
 interface AddOrderDialogProps {
   onSuccess?: () => void;
@@ -57,6 +48,9 @@ export function AddOrderDialog({ onSuccess }: AddOrderDialogProps) {
   const [notes, setNotes] = useState("");
   const [discount, setDiscount] = useState(0);
   
+  // Add-ons from database
+  const [availableAddons, setAvailableAddons] = useState<Addon[]>([]);
+  
   // Order items with add-ons
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
@@ -72,6 +66,11 @@ export function AddOrderDialog({ onSuccess }: AddOrderDialogProps) {
     if (result.data) {
       setProducts(result.data.filter((p: Product) => !p.is_hidden));
     }
+    
+    // Also fetch addons
+    const addonsData = await getActiveAddons();
+    setAvailableAddons(addonsData);
+    
     setLoadingProducts(false);
   };
 

@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ShoppingBag, Wine, Candy, PartyPopper } from "lucide-react";
+import { ShoppingBag, Wine, Candy, PartyPopper, Gift, Sparkles } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { formatPrice } from "@/lib/format";
+
+import { getActiveAddons, type Addon } from "@/lib/services/products";
 
 interface Upgrade {
   id: string;
@@ -14,50 +16,25 @@ interface Upgrade {
   description: string;
   price: number;
   image: string;
-  category: "chocolate" | "wine" | "balloon" | "teddy";
+  category: "chocolate" | "wine" | "balloon" | "teddy" | "extra";
 }
 
-const upgrades: Upgrade[] = [
-  {
-    id: "premium-chocolate-box",
-    name: "Premium Chocolate Box",
-    description: "Exquisite Belgian chocolates in a luxury gift box",
-    price: 350000,
-    image: "/images/add-ons/Choholate.webp",
-    category: "chocolate",
-  },
-  {
-    id: "red-wine-bottle",
-    name: "Red Wine Bottle",
-    description: "Premium imported red wine to complement your flowers",
-    price: 650000,
-    image: "/images/add-ons/Wine.avif",
-    category: "wine",
-  },
-  {
-    id: "balloon-bouquet",
-    name: "Balloon Bouquet",
-    description: "Colorful helium balloons for extra celebration",
-    price: 150000,
-    image: "/images/add-ons/Balloon.webp",
-    category: "balloon",
-  },
-  {
-    id: "teddy-bear-large",
-    name: "Giant Teddy Bear",
-    description: "Soft and cuddly teddy bear, perfect for hugs",
-    price: 450000,
-    image: "/images/add-ons/Teddy Bear.webp",
-    category: "teddy",
-  },
-];
-
-const categoryIcons = {
+const categoryIcons: Record<string, any> = {
   chocolate: Candy,
   wine: Wine,
   balloon: PartyPopper,
   teddy: "🧸",
+  extra: Gift,
 };
+
+function getCategoryFromName(name: string): Upgrade["category"] {
+  const n = name.toLowerCase();
+  if (n.includes("chocolate") || n.includes("ferrero")) return "chocolate";
+  if (n.includes("wine")) return "wine";
+  if (n.includes("balloon")) return "balloon";
+  if (n.includes("teddy") || n.includes("bear")) return "teddy";
+  return "extra";
+}
 
 function UpgradeCard({
   upgrade,
@@ -125,7 +102,31 @@ function UpgradeCard({
 }
 
 export function UpgradesSection() {
+  const [upgrades, setUpgrades] = useState<Upgrade[]>([]);
+  const [loading, setLoading] = useState(true);
   const { addItem } = useCart();
+
+  useEffect(() => {
+    async function fetchUpgrades() {
+      try {
+        const data = await getActiveAddons();
+        const mappedUpgrades: Upgrade[] = data.map(addon => ({
+          id: addon.id,
+          name: addon.name,
+          description: addon.description,
+          price: addon.price,
+          image: addon.image,
+          category: getCategoryFromName(addon.name)
+        }));
+        setUpgrades(mappedUpgrades);
+      } catch (err) {
+        console.error("Error fetching upgrades:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchUpgrades();
+  }, []);
 
   const handleAddToCart = (upgrade: Upgrade) => {
     addItem({
@@ -177,15 +178,21 @@ export function UpgradesSection() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {upgrades.map((upgrade) => (
-            <UpgradeCard
-              key={upgrade.id}
-              upgrade={upgrade}
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <Sparkles className="w-8 h-8 animate-pulse text-gold" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {upgrades.map((upgrade) => (
+              <UpgradeCard
+                key={upgrade.id}
+                upgrade={upgrade}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -131,21 +131,43 @@ export function EditAddonDialog({ addon, isOpen, onClose, onSuccess }: EditAddon
                         fill
                         className="object-cover"
                       />
-                      <div className="absolute top-2 right-2 flex gap-1">
+                      {/* Overlay to change image - z-10 */}
+                      <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity cursor-pointer z-10">
+                        <div className="text-center text-white">
+                          <Upload className="w-6 h-6 mx-auto mb-1" />
+                          <span className="text-sm">Change Image</span>
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          className="hidden"
+                        />
+                      </label>
+                      {/* Crop and remove buttons - z-20 (above overlay) */}
+                      <div className="absolute top-2 right-2 flex gap-1 z-20">
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
                             setTempImageSrc(imagePreview);
                             setShowCropDialog(true);
                           }}
                           className="p-1.5 bg-white rounded-full shadow-lg hover:bg-gray-100"
+                          title="Re-crop image"
                         >
                           <Crop className="w-4 h-4" />
                         </button>
                         <button
                           type="button"
-                          onClick={clearImage}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            clearImage();
+                          }}
                           className="p-1.5 bg-white rounded-full shadow-lg hover:bg-gray-100"
+                          title="Remove image"
                         >
                           <X className="w-4 h-4" />
                         </button>
