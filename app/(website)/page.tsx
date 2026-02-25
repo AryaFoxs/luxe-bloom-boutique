@@ -9,7 +9,9 @@ import {
   AboutSection,
   ContactSection,
   ProductCollectionSection,
+  WomensDayBanner,
 } from "@/components/sections";
+
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 
 export default function Home() {
@@ -17,11 +19,16 @@ export default function Home() {
     <>
       {/* 1. Hero Section */}
       <HeroSection />
-      
-      {/* 2. Signature Bouquets (On Sale) */}
+
+      {/* 2. Women's Day Special Banner */}
+      <WomensDayBanner />
+
+      {/* 3. Signature Bouquets (On Sale) */}
       <OnSaleSection />
+
       
-      {/* 3. Fresh Flower Section */}
+      {/* 4. Fresh Flower Section */}
+
       <ProductCollectionSection 
         id="fresh-flowers"
         title="Fresh Flower"
@@ -33,10 +40,12 @@ export default function Home() {
         viewAllText="Explore Fresh Collection"
       />
       
-      {/* 4. Rose Collection */}
+      {/* 5. Rose Collection */}
+
       <RoseCollection />
       
-      {/* 5. Satin Flower Section (Artificial) */}
+      {/* 6. Satin Flower Section (Artificial) */}
+
       <ProductCollectionSection 
         id="satin-flowers"
         title="Satin Flower"
@@ -48,7 +57,8 @@ export default function Home() {
         viewAllText="Explore Satin Collection"
       />
       
-      {/* 6. All Flower Section */}
+      {/* 7. All Flower Section */}
+
       <ProductCollectionSection 
         id="all-flowers"
         title="All Flower"
@@ -59,22 +69,28 @@ export default function Home() {
         viewAllText="See Everything"
       />
       
-      {/* 7. Grand Gestures (Baller Packages) */}
+      {/* 8. Grand Gestures (Baller Packages) */}
+
       <BallerPackagesSection />
       
-      {/* 8. Make It Even More Special (Upgrades) */}
+      {/* 9. Make It Even More Special (Upgrades) */}
+
       <UpgradesSection />
       
-      {/* 9. Order Your Custom Bouquet (Bespoke) */}
+      {/* 10. Order Your Custom Bouquet (Bespoke) */}
+
       <BespokeServiceSection />
       
-      {/* 10. Same Day Delivery Across Bali */}
+      {/* 11. Same Day Delivery Across Bali */}
+
       <DeliverySection />
       
-      {/* 11. Where Poetry Meets Petals (About) */}
+      {/* 12. Where Poetry Meets Petals (About) */}
+
       <AboutSection />
       
-      {/* 12. Let's Talk Flowers (Contact) */}
+      {/* 13. Let's Talk Flowers (Contact) */}
+
       <ContactSection />
       
       {/* WhatsApp Floating Button */}
