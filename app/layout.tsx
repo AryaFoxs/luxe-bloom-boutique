@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -42,9 +42,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const adsId = process.env.NEXT_PUBLIC_ADS_ID;
+
   return (
     <html lang="id" className="scroll-smooth">
       <head>
+        {/* Google Tag (gtag.js) */}
+        {(gaId || adsId) && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId || adsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-tag-manager" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                ${gaId ? `gtag('config', '${gaId}');` : ''}
+                ${adsId ? `gtag('config', '${adsId}');` : ''}
+              `}
+            </Script>
+          </>
+        )}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 
@@ -55,7 +77,6 @@ export default function RootLayout({
       <body className="antialiased">
         {children}
       </body>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
     </html>
   );
 }
